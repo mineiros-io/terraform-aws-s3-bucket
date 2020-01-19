@@ -1,6 +1,6 @@
 # Terraform Module for creating a secure S3-Bucket
 
-## Features
+## Module Features
 In contrast to the plain `aws_s3_bucket` resource this module creates secure
 buckets by default. While all security features can be disabled as needed best practices
 are pre-configured.
@@ -25,7 +25,7 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Tags
 
 - **Extended S3 Features**:
-  Bucket Public Access Blocking defaulting to `true`
+  Bucket Public Access Blocking
 
 - **Additional Features**:
   Cross-Account access policy with forced `bucket-owner-full-control` ACL for direct access
