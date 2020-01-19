@@ -1,4 +1,14 @@
-# Terraform Module for creating a secure S3-Bucket
+<img src="https://i.imgur.com/t8IkKoZl.png" width="200"/>
+
+[![Maintained by Mineiros.io](https://img.shields.io/badge/maintained%20by-mineiros.io-00607c.svg)](https://www.mineiros.io/ref=repo_terraform-github-repository)
+[![Build Status](https://mineiros.semaphoreci.com/badges/terraform-github-repository/branches/master.svg?style=shields)](https://mineiros.semaphoreci.com/badges/terraform-aws-s3-bucket/branches/master.svg?style=shields)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/mineiros-io/terraform-aws-s3-bucket.svg?label=latest&sort=semver)](https://github.com/mineiros-io/terraform-aws-s3-bucket/releases)
+[![Terraform Version](https://img.shields.io/badge/terraform-~%3E%200.12.9-brightgreen.svg)](https://github.com/hashicorp/terraform/releases)
+[![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+
+# terraform-aws-s3-bucket
+
+A [Terraform](https://www.terraform.io) 0.12 module for running a [creating a secure S3-Bucket](https://aws.amazon.com/s3/) on [Amazon Web Services (AWS)](https://aws.amazon.com/).
 
 ## Module Features
 In contrast to the plain `aws_s3_bucket` resource this module creates secure
