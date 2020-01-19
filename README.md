@@ -170,7 +170,7 @@ Default is `["s3:PutObject", "s3:PutObjectAcl"]`.
 Specifies ACLs to force on new objects for cross account access.
 Default is `["bucket-owner-full-control"]`.
 
-#### `cors_rule` Object Attributes
+#### [`cors_rule`](#bucket-configuration) Object Attributes
 - **`allowed_headers`**: *(Optional `list(string)`)*
 Specifies which headers are allowed.
 Default is `[]`.
@@ -189,7 +189,7 @@ Default is `[]`.
 Specifies time in seconds that browser can cache the response for a preflight request.
 Default is `null`.
 
-#### `versioning` Object Attributes
+#### [`versioning`](#bucket-configuration) Object Attributes
 - **`enabled`**: *(Optional `bool`)*
 Once you version-enable a bucket, it can never return to an unversioned state.
 You can, however, suspend versioning on that bucket.
@@ -200,7 +200,7 @@ Enable MFA delete for either Change the versioning state of your bucket or
 permanently delete an object version.
 Default is `false`.
 
-#### `logging` Object Attributes
+#### [`logging`](#bucket-configuration) Object Attributes
 - **`target_bucket`**: ***(Required `string`)***
 The name of the bucket that will receive the log objects.
 
@@ -208,7 +208,7 @@ The name of the bucket that will receive the log objects.
 To specify a key prefix for log objects.
 Default is `null`.
 
-#### `apply_server_side_encryption_by_default` Object Attributes
+#### [`apply_server_side_encryption_by_default`](#bucket-configuration) Object Attributes
 - **`sse_algorithm`**: *(Optional `string`)*
 The server-side encryption algorithm to use. Valid values are `AES256` and `aws:kms`.
 Default is `aws:kms` when `kms_master_key_id` is specified else `AES256`
@@ -217,7 +217,7 @@ Default is `aws:kms` when `kms_master_key_id` is specified else `AES256`
 The AWS KMS master key ID used for the SSE-KMS encryption. The default `aws/s3` AWS KMS master key is used if this element is absent while the sse_algorithm is `aws:kms`.
 Default is `null`.
 
-#### `lifecycle_rules` Object Attributes
+#### [`lifecycle_rules`](#bucket-configuration) Object Attributes
 - **`id`**: *(Optional `string`)*
 Unique identifier for the rule.
 
