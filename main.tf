@@ -39,7 +39,7 @@ resource "aws_s3_bucket" "bucket" {
 
     content {
       enabled    = lookup(versioning.value, "enabled", null)
-      mfa_delete = lookup(versioning.value, "mfa_delete", null)
+      mfa_delete = lookup(versioning.value, "mfa_delete", false)
     }
   }
 
@@ -59,8 +59,10 @@ resource "aws_s3_bucket" "bucket" {
     content {
       rule {
         apply_server_side_encryption_by_default {
-          sse_algorithm     = sse.value.sse_algorithm
           kms_master_key_id = lookup(sse.value, "kms_master_key_id", null)
+          sse_algorithm = lookup(sse.value, "sse_algorithm",
+            lookup(sse.value, "kms_master_key_id", null) == null ? "AES256" : "aws:kms"
+          )
         }
       }
     }
