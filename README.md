@@ -8,7 +8,18 @@
 
 # terraform-aws-s3-bucket
 
-A [Terraform](https://www.terraform.io) 0.12 module for running a [creating a secure S3-Bucket](https://aws.amazon.com/s3/) on [Amazon Web Services (AWS)](https://aws.amazon.com/).
+A [Terraform](https://www.terraform.io) 0.12 base module for
+[creating a secure S3-Bucket](https://aws.amazon.com/s3/) on
+[Amazon Web Services (AWS)](https://aws.amazon.com/).
+
+- [Module Features](#module-features)
+- [Getting Started](#getting-started)
+- [Module Attribute Reference](#module-attribute-reference)
+- [Module Versioning](#module-versioning)
+- [About Mineiros](#about-mineiros)
+- [Reporting Issues](#reporting-issues)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Module Features
 In contrast to the plain `aws_s3_bucket` resource this module creates secure
@@ -51,6 +62,15 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Cloudfront Origin Access Identity (OAI) policy,
   Generate Cross-Account role for OAI enabled buckets if desired,
   Generate KMS key to encrypt objects at rest if desired
+
+## Getting Started
+Most basic usage creating a random named secure AWS bucket.
+```
+module "bucket" {
+  source  = "mineiros-io/terraform-aws-s3-bucket"
+  version = "0.0.1"
+}
+```
 
 ## Module Attribute Reference
 See [variables.tf](variables.tf) and [examples/](examples) for details and use-cases.
@@ -294,8 +314,27 @@ Given a version number `MAJOR.MINOR.PATCH`, we increment the:
 - Backwards compatibility in versions `0.0.z` is **not guaranteed** when `z` is increased. (Initial development)
 - Backwards compatibility in versions `0.y.z` is **not guaranteed** when `y` is increased. (Pre-release)
 
-## Module License
+## About Mineiros
+Mineiros is a [DevOps as a Service](https://mineiros.io/) Company based in Berlin, Germany.
+We offer Commercial Support for all of our projects, just send us an email to [hello@mineiros.io](mailto:hello@mineiros.io).
+
+We can also help you with:
+- Terraform Modules for all types of infrastructure such as VPC's, Docker clusters,
+databases, logging and monitoring, CI, etc.
+- Complex Cloud- and Multi Cloud environments.
+- Consulting & Training on AWS, Terraform and DevOps.
+
+## Reporting Issues
+We use GitHub [Issues](https://github.com/mineiros-io/terraform-aws-s3-bucket/issues) to track community reported issues and missing features.
+
+## Contributing
+Contributions are very welcome!
+We use [Pull Requests](https://github.com/mineiros-io/terraform-aws-s3-bucket/pulls)
+for accepting changes.
+Please see our [Contribution Guidelines](CONTRIBUTION) for full details.
+
+## License
 This module is licensed under the Apache License Version 2.0, January 2004.
-Please see [LICENSE](https://github.com/mineiros-io/terraform-module-template/blob/master/LICENSE) for full details.
+Please see [LICENSE](LICENSE) for full details.
 
 Copyright &copy; 2020 Mineiros
