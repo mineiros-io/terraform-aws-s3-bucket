@@ -3,16 +3,16 @@
 # These variables must be set when using this module.
 # ---------------------------------------------------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------------------------------------------------
+# OPTIONAL PARAMETERS
+# These variables have defaults, but may be overridden.
+# ---------------------------------------------------------------------------------------------------------------------
+
 variable "region" {
   description = "If specified, the AWS region this bucket should reside in. (default: region of the callee)"
   type        = string
   default     = null
 }
-
-# ---------------------------------------------------------------------------------------------------------------------
-# OPTIONAL PARAMETERS
-# These variables have defaults, but may be overridden.
-# ---------------------------------------------------------------------------------------------------------------------
 
 variable "bucket" {
   description = "The name of the bucket. (forces new resource, default: unique random name)"
