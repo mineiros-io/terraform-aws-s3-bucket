@@ -14,7 +14,7 @@ provider "aws" {
 module "example-app-bucket" {
   source = "../.."
 
-  aws_region = var.aws_region
+  region = var.aws_region
 
   versioning = {
     enabled = true
@@ -46,8 +46,8 @@ module "example-app-bucket" {
 module "example-log-bucket" {
   source = "../.."
 
-  aws_region = var.aws_region
-  acl        = "log-delivery-write"
+  region = var.aws_region
+  acl    = "log-delivery-write"
 
   lifecycle_rules = [
     {
