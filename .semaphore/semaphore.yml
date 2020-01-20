@@ -4,8 +4,14 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
-blocks:
 
+# enable auto-cancel for branches, tags and pull-requests
+# https://docs.semaphoreci.com/use-cases/auto-cancel-previous-pipelines-on-a-new-push/
+auto_cancel:
+  queued:
+    when: "true"
+
+blocks:
   - name: "Build"
     task:
       prologue:
@@ -38,4 +44,4 @@ blocks:
             - make docker-run-pre-commit-hooks-from-cache
         - name: "Unit Tests"
           commands:
-            - make docker-run-tests
+            - make docker-run-tests-from-cache
