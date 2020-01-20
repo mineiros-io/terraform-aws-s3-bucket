@@ -67,7 +67,7 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
 Most basic usage creating a random named secure AWS bucket.
 ```
 module "bucket" {
-  source  = "mineiros-io/terraform-aws-s3-bucket"
+  source  = "mineiros-io/s3-bucket/aws"
   version = "0.0.1"
 }
 ```
