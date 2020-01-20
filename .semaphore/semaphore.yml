@@ -5,7 +5,8 @@ agent:
     type: e1-standard-2
     os_image: ubuntu1804
 
-# enable auto-cancel for branches, tags and pull-requests
+# Enable auto-cancel builds of branches, tags and pull-requests.
+# The queued strategy will only cancel pipelines that are waiting in the queue and have not yet started to run.
 # https://docs.semaphoreci.com/use-cases/auto-cancel-previous-pipelines-on-a-new-push/
 auto_cancel:
   queued:
