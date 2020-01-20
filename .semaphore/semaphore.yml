@@ -1,0 +1,38 @@
+version: v1.0
+name: "Terraform-Aws-S3-Bucket CI Pipeline"
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+
+  - name: "Build"
+    task:
+      prologue:
+        commands:
+          - export BUILD_VERSION=${SEMAPHORE_GIT_SHA:0:7}
+          - checkout
+      jobs:
+        - name: "Build Docker Image"
+          commands:
+            - make docker-build
+            - make docker-save
+            - cache store ${SEMAPHORE_PROJECT_NAME}-${BUILD_VERSION} ${SEMAPHORE_PROJECT_NAME}-${BUILD_VERSION}.tar
+
+  - name: "Tests"
+    task:
+      env_vars:
+        - name: TF_IN_AUTOMATION
+          value: "true"
+      secrets:
+        - name: TERRAFORM_GITHUB_CREDENTIALS
+        - name: TERRAFORM_GITHUB_AWS_CREDENTIALS
+      prologue:
+        commands:
+          - export BUILD_VERSION=${SEMAPHORE_GIT_SHA:0:7}
+          - checkout --use-cache
+          - cache restore ${SEMAPHORE_PROJECT_NAME}-${BUILD_VERSION}
+      jobs:
+        - name: "Pre Commit Hooks"
+          commands:
+            - make docker-run-pre-commit-hooks-from-cache
