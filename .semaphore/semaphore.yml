@@ -26,7 +26,7 @@ blocks:
           value: "true"
       secrets:
         - name: TERRAFORM_GITHUB_CREDENTIALS
-        - name: TERRAFORM_GITHUB_AWS_CREDENTIALS
+        - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
       prologue:
         commands:
           - export BUILD_VERSION=${SEMAPHORE_GIT_SHA:0:7}
@@ -36,3 +36,6 @@ blocks:
         - name: "Pre Commit Hooks"
           commands:
             - make docker-run-pre-commit-hooks-from-cache
+        - name: "Unit Tests"
+          commands:
+            - make docker-run-tests

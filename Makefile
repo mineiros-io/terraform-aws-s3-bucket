@@ -41,13 +41,27 @@ docker-run-pre-commit-hooks-from-cache: docker-load
 		${REPOSITORY_NAME}:${BUILD_VERSION} \
 		pre-commit run --all-files
 
+# Run go test
+docker-run-tests: docker-build
+	docker run --rm \
+		-e AWS_ACCESS_KEY_ID \
+		-e AWS_SECRET_ACCESS_KEY \
+		${REPOSITORY_NAME}:${BUILD_VERSION} \
+		go test -v test/terraform_aws_s3_bucket_test.go
+
+# Run go test using a cached image
+docker-run-tests-from-cache: docker-load
+	docker run --rm \
+		-e AWS_ACCESS_KEY_ID \
+		-e AWS_SECRET_ACCESS_KEY \
+		${REPOSITORY_NAME}:${BUILD_VERSION} \
+		go test -v test/terraform_aws_s3_bucket_test.go
+
 # Run terraform plan
 docker-run-terraform-plan: docker-build
 	docker run --rm \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
-		-e GITHUB_TOKEN \
-		-e GITHUB_ORGANIZATION \
 		${REPOSITORY_NAME}:${BUILD_VERSION} \
 		sh -c "terraform init -input=false && terraform plan -input=false"
 
@@ -56,16 +70,9 @@ docker-run-terraform-plan-from-cache: docker-load
 	docker run --rm \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
-		-e GITHUB_TOKEN \
-		-e GITHUB_ORGANIZATION \
 		${REPOSITORY_NAME}:${BUILD_VERSION} \
 		sh -c "terraform init -input=false && terraform plan -input=false"
 
 
-.PHONY: docker-build
-.PHONY: docker-save
-.PHONY: docker-load
-.PHONY: docker-run-pre-commit-hooks
-.PHONY: docker-run-pre-commit-hooks-from-cache
-.PHONY: docker-run-terraform-plan
-.PHONY: docker-run-terraform-plan-from-cache
+.PHONY: docker-build docker-save docker-load docker-run-pre-commit-hooks docker-run-pre-commit-hooks-from-cache \
+ docker-run-tests docker-run-tests-from-cache docker-run-terraform-plan docker-run-terraform-plan-from-cache
