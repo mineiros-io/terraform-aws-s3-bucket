@@ -26,6 +26,22 @@ variable "policy" {
   description = "A bucket policy in JSON format."
   type        = string
   default     = null
+
+  # Example:
+  # policy + [
+  #
+  #     {
+  #       "Sid": "IPAllow",
+  #       "Effect": "Deny",
+  #       "Principal": "*",
+  #       "Action": "s3:*",
+  #       "Resource": "arn:aws:s3:::examplebucket/*",
+  #       "Condition": {
+  #          "NotIpAddress": {"aws:SourceIp": "54.240.143.0/24"}
+  #
+  #       }
+  #     }
+  #   ]
 }
 
 variable "tags" {
@@ -62,18 +78,38 @@ variable "cors_rule" {
   description = "Object containing a rule of Cross-Origin Resource Sharing."
   type        = any
   default     = {}
+
+  # Example:
+  # cors_rule = {
+  #   allowed_headers = ["*"]
+  #   allowed_methods = ["PUT", "POST"]
+  #   allowed_origins = ["https://s3-website-test.example.com"]
+  #   expose_headers  = ["ETag"]
+  #   max_age_seconds = 3000
+  # }
 }
 
 variable "versioning" {
   description = "Map containing versioning configuration."
   type        = map(string)
   default     = {}
+
+  # Example:
+  # versioning = {
+  #   enabled = true
+  # }
 }
 
 variable "logging" {
   description = "Map containing access bucket logging configuration."
   type        = map(string)
   default     = {}
+
+  # Example:
+  # logging = {
+  #   target_bucket = "example-bucket"
+  #   target_prefix = "log/"
+  # }
 }
 
 variable "apply_server_side_encryption_by_default" {
@@ -88,6 +124,36 @@ variable "lifecycle_rules" {
   description = "List of maps containing configuration of object lifecycle management."
   type        = any
   default     = []
+
+  # Example:
+  # lifecycle_rules = [
+  #   {
+  #     id      = "log"
+  #     enabled = true
+  #
+  #     prefix = "log/"
+  #
+  #     tags = {
+  #       "rule"      = "log"
+  #       "autoclean" = "true"
+  #     }
+  #
+  #     transition = [
+  #       {
+  #         days          = 30
+  #         storage_class = "STANDARD_IA" # or "ONEZONE_IA"
+  #       },
+  #       {
+  #         days          = 60
+  #         storage_class = "GLACIER"
+  #       }
+  #     ]
+  #
+  #     expiration = {
+  #       days = 90
+  #     }
+  #   }
+  # ]
 }
 
 variable "block_public_acls" {
