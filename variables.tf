@@ -1,3 +1,18 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# REQUIRED PARAMETERS
+# These variables must be set when using this module.
+# ---------------------------------------------------------------------------------------------------------------------
+
+variable "region" {
+  description = "The AWS region this bucket should reside in."
+  type        = string
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# OPTIONAL PARAMETERS
+# These variables have defaults, but may be overridden.
+# ---------------------------------------------------------------------------------------------------------------------
+
 variable "bucket" {
   description = "The name of the bucket. (forces new resource, default: unique random name)"
   type        = string
@@ -48,6 +63,12 @@ variable "tags" {
   description = "A mapping of tags to assign to the bucket."
   type        = map(string)
   default     = {}
+
+  # Example:
+  # tags = {
+  #   Name        = "Just an Example"
+  #   Environment = "Testing"
+  # }
 }
 
 variable "force_destroy" {
@@ -58,12 +79,6 @@ variable "force_destroy" {
 
 variable "acceleration_status" {
   description = "Sets the accelerate configuration of an existing bucket. Can be Enabled or Suspended."
-  type        = string
-  default     = null
-}
-
-variable "region" {
-  description = "If specified, the AWS region this bucket should reside in. (default: region of the callee)"
   type        = string
   default     = null
 }
@@ -182,8 +197,14 @@ variable "restrict_public_buckets" {
 
 variable "cross_account_identifiers" {
   type        = list(string)
-  description = "Identifiers that you want to grant cross account access to"
+  description = "Identifiers that you want to grant cross account access to."
   default     = []
+
+  # Example:
+  # cross_account_identifiers = [
+  #   "112233445566",
+  #   "112233445566"
+  # ]
 }
 
 variable "cross_account_bucket_actions" {
