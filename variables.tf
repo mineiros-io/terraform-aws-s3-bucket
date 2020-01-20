@@ -5,7 +5,7 @@ variable "bucket" {
 }
 
 variable "bucket_prefix" {
-  description = "Creates a unique bucket name beginning with the specified prefix. (forces new resource)"
+  description = "Creates a unique bucket name beginning with the specified prefix. Conflicts with bucket. (forces new resource)"
   type        = string
   default     = null
 }
