@@ -33,7 +33,7 @@ variable "create" {
 }
 
 variable "acl" {
-  description = "The canned ACL to apply."
+  description = "The canned ACL to apply. https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl"
   type        = string
   default     = "private"
 }
@@ -42,22 +42,6 @@ variable "policy" {
   description = "A bucket policy in JSON format."
   type        = string
   default     = null
-
-  # Example:
-  # policy + [
-  #
-  #     {
-  #       "Sid": "IPAllow",
-  #       "Effect": "Deny",
-  #       "Principal": "*",
-  #       "Action": "s3:*",
-  #       "Resource": "arn:aws:s3:::examplebucket/*",
-  #       "Condition": {
-  #          "NotIpAddress": {"aws:SourceIp": "54.240.143.0/24"}
-  #
-  #       }
-  #     }
-  #   ]
 }
 
 variable "tags" {
