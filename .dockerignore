@@ -1,0 +1,24 @@
+# Idea
+.idea
+
+# Misc
+CODEOWNERS
+Makefile
+README.*
+LICENSE
+
+# Terraform
+.terraform
+
+# Go vendors
+vendor
+
+# Git
+#.git required for pre-commit
+.gitignore
+
+# CI
+.semaphore
+
+# Docker
+Dockerfile

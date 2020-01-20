@@ -1,7 +1,7 @@
 <img src="https://i.imgur.com/t8IkKoZl.png" width="200"/>
 
 [![Maintained by Mineiros.io](https://img.shields.io/badge/maintained%20by-mineiros.io-00607c.svg)](https://www.mineiros.io/ref=repo_terraform-github-repository)
-[![Build Status](https://mineiros.semaphoreci.com/badges/terraform-github-repository/branches/master.svg?style=shields)](https://mineiros.semaphoreci.com/badges/terraform-aws-s3-bucket/branches/master.svg?style=shields)
+[![Build Status](https://mineiros.semaphoreci.com/badges/terraform-aws-s3-bucket/branches/master.svg?style=shields)](https://mineiros.semaphoreci.com/badges/terraform-aws-s3-bucket/branches/master.svg?style=shields)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/mineiros-io/terraform-aws-s3-bucket.svg?label=latest&sort=semver)](https://github.com/mineiros-io/terraform-aws-s3-bucket/releases)
 [![Terraform Version](https://img.shields.io/badge/terraform-~%3E%200.12.9-brightgreen.svg)](https://github.com/hashicorp/terraform/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -67,7 +67,7 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
 Most basic usage creating a random named secure AWS bucket.
 ```
 module "bucket" {
-  source  = "mineiros-io/terraform-aws-s3-bucket"
+  source  = "mineiros-io/s3-bucket/aws"
   version = "0.0.1"
 }
 ```

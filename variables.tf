@@ -1,3 +1,19 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# REQUIRED PARAMETERS
+# These variables must be set when using this module.
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------------------
+# OPTIONAL PARAMETERS
+# These variables have defaults, but may be overridden.
+# ---------------------------------------------------------------------------------------------------------------------
+
+variable "region" {
+  description = "If specified, the AWS region this bucket should reside in. (default: region of the callee)"
+  type        = string
+  default     = null
+}
+
 variable "bucket" {
   description = "The name of the bucket. (forces new resource, default: unique random name)"
   type        = string
@@ -5,7 +21,7 @@ variable "bucket" {
 }
 
 variable "bucket_prefix" {
-  description = "Creates a unique bucket name beginning with the specified prefix. (forces new resource)"
+  description = "Creates a unique bucket name beginning with the specified prefix. Conflicts with bucket. (forces new resource)"
   type        = string
   default     = null
 }
@@ -17,7 +33,7 @@ variable "create" {
 }
 
 variable "acl" {
-  description = "The canned ACL to apply."
+  description = "The canned ACL to apply. https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl"
   type        = string
   default     = "private"
 }
@@ -32,6 +48,12 @@ variable "tags" {
   description = "A mapping of tags to assign to the bucket."
   type        = map(string)
   default     = {}
+
+  # Example:
+  # tags = {
+  #   Name        = "Just an Example"
+  #   Environment = "Testing"
+  # }
 }
 
 variable "force_destroy" {
@@ -46,12 +68,6 @@ variable "acceleration_status" {
   default     = null
 }
 
-variable "region" {
-  description = "If specified, the AWS region this bucket should reside in. (default: region of the callee)"
-  type        = string
-  default     = null
-}
-
 variable "request_payer" {
   description = "Specifies who should bear the cost of Amazon S3 data transfer. Can be either BucketOwner or Requester. See Requester Pays Buckets developer guide for more information."
   type        = string
@@ -62,18 +78,38 @@ variable "cors_rule" {
   description = "Object containing a rule of Cross-Origin Resource Sharing."
   type        = any
   default     = {}
+
+  # Example:
+  # cors_rule = {
+  #   allowed_headers = ["*"]
+  #   allowed_methods = ["PUT", "POST"]
+  #   allowed_origins = ["https://s3-website-test.example.com"]
+  #   expose_headers  = ["ETag"]
+  #   max_age_seconds = 3000
+  # }
 }
 
 variable "versioning" {
   description = "Map containing versioning configuration."
   type        = map(string)
   default     = {}
+
+  # Example:
+  # versioning = {
+  #   enabled = true
+  # }
 }
 
 variable "logging" {
   description = "Map containing access bucket logging configuration."
   type        = map(string)
   default     = {}
+
+  # Example:
+  # logging = {
+  #   target_bucket = "example-bucket"
+  #   target_prefix = "log/"
+  # }
 }
 
 variable "apply_server_side_encryption_by_default" {
@@ -88,6 +124,36 @@ variable "lifecycle_rules" {
   description = "List of maps containing configuration of object lifecycle management."
   type        = any
   default     = []
+
+  # Example:
+  # lifecycle_rules = [
+  #   {
+  #     id      = "log"
+  #     enabled = true
+  #
+  #     prefix = "log/"
+  #
+  #     tags = {
+  #       "rule"      = "log"
+  #       "autoclean" = "true"
+  #     }
+  #
+  #     transition = [
+  #       {
+  #         days          = 30
+  #         storage_class = "STANDARD_IA" # or "ONEZONE_IA"
+  #       },
+  #       {
+  #         days          = 60
+  #         storage_class = "GLACIER"
+  #       }
+  #     ]
+  #
+  #     expiration = {
+  #       days = 90
+  #     }
+  #   }
+  # ]
 }
 
 variable "block_public_acls" {
@@ -116,8 +182,14 @@ variable "restrict_public_buckets" {
 
 variable "cross_account_identifiers" {
   type        = list(string)
-  description = "Identifiers that you want to grant cross account access to"
+  description = "Identifiers that you want to grant cross account access to."
   default     = []
+
+  # Example:
+  # cross_account_identifiers = [
+  #   "112233445566",
+  #   "112233445566"
+  # ]
 }
 
 variable "cross_account_bucket_actions" {
