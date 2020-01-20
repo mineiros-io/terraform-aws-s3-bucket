@@ -4,25 +4,24 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  version = "~> 2.0"
-  region  = var.aws_region
+  region = var.aws_region
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Create the Example App S3 Bucket
 # ---------------------------------------------------------------------------------------------------------------------
 
-module "example-bucket" {
+module "example-app-bucket" {
   source = "../.."
 
-  acl = "log-delivery-write"
+  aws_region = var.aws_region
 
   versioning = {
     enabled = true
   }
 
   logging = {
-    target_bucket = module.log-bucket.id
+    target_bucket = module.example-log-bucket.id
     target_prefix = "log/"
   }
 
@@ -34,33 +33,22 @@ module "example-bucket" {
     max_age_seconds = 3000
   }
 
-  policy = <<-POLICY
-    "Statement": [
-      {
-        "Sid": "IPAllow",
-        "Effect": "Deny",
-        "Principal": "*",
-        "Action": "s3:*",
-        "Resource": "arn:aws:s3:::examplebucket/*",
-        "Condition": {
-           "NotIpAddress": {"aws:SourceIp": "54.240.143.0/24"}
-        }
-      }
-    ]
-  POLICY
-
   tags = {
     Name        = "Just a S3 Bucket"
     Environment = "Testing"
   }
 }
 
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Create the Example Log S3 Bucket
 # ---------------------------------------------------------------------------------------------------------------------
 
-module "log-bucket" {
+module "example-log-bucket" {
   source = "../.."
+
+  aws_region = var.aws_region
+  acl        = "log-delivery-write"
 
   lifecycle_rules = [
     {

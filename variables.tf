@@ -4,8 +4,9 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "region" {
-  description = "The AWS region this bucket should reside in."
+  description = "If specified, the AWS region this bucket should reside in. (default: region of the callee)"
   type        = string
+  default     = null
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
