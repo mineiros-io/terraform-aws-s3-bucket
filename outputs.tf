@@ -1,3 +1,13 @@
+output "create" {
+  description = "The create input value"
+  value       = var.create
+}
+
+output "bucket" {
+  description = "The full bucket object"
+  value       = try(aws_s3_bucket.bucket[0], {})
+}
+
 output "id" {
   description = "The name of the bucket."
   value       = join("", aws_s3_bucket.bucket.*.id)
