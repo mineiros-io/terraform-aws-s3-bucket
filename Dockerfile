@@ -20,7 +20,7 @@ RUN sed -i '/terraform_.*_linux_amd64.zip/!d' terraform_${TERRAFORM_VERSION}_SHA
 RUN sha256sum -cs terraform_${TERRAFORM_VERSION}_SHA256SUMS
 
 # Unzip and move to bin directory
-RUN unzip terraform_0.12.19_linux_amd64.zip -d /usr/local/bin
+RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin
 
 # Install pre-commit
 RUN pip3 install pre-commit
