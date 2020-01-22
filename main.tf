@@ -1,13 +1,17 @@
 locals {
-  cors_enabled       = length(keys(var.cors_rule)) > 0
-  versioning_enabled = length(keys(var.versioning)) > 0
-  logging_enabled    = length(keys(var.logging)) > 0
-  sse_enabled        = length(keys(var.apply_server_side_encryption_by_default)) > 0
+  cors_enabled    = length(keys(var.cors_rule)) > 0
+  logging_enabled = length(keys(var.logging)) > 0
+  sse_enabled     = length(keys(var.apply_server_side_encryption_by_default)) > 0
 
   cors       = local.cors_enabled ? [var.cors_rule] : []
-  versioning = local.versioning_enabled ? [var.versioning] : []
   logging    = local.logging_enabled ? [var.logging] : []
   encryption = local.sse_enabled ? [var.apply_server_side_encryption_by_default] : []
+
+  versioning = try(
+    [{ enabled = tobool(var.versioning) }],
+    length(keys(var.versioning)) > 0 ? [var.versioning] : [],
+    []
+  )
 }
 
 resource "aws_s3_bucket" "bucket" {

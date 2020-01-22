@@ -16,9 +16,7 @@ module "example-app-bucket" {
 
   region = var.aws_region
 
-  versioning = {
-    enabled = true
-  }
+  versioning = true
 
   logging = {
     target_bucket = module.example-log-bucket.id

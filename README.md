@@ -65,10 +65,11 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
 
 ## Getting Started
 Most basic usage creating a random named secure AWS bucket.
-```
+
+```hcl
 module "bucket" {
   source  = "mineiros-io/s3-bucket/aws"
-  version = "0.0.1"
+  version = "0.0.3"
 }
 ```
 
@@ -121,9 +122,9 @@ See Requester Pays Buckets developer guide for more information.
 specifying settings for Cross-Origin Resource Sharing (CORS) (documented below).
 Default is `{}`.
 
-- **[`versioning`](#versioning-object-attributes)**: *(Optional `object`)*
-Specifying the Versioning Configuration (documented below).
-Default is `{}`.
+- **[`versioning`](#versioning-object-attributes)**: *(Optional `bool` or `object`)*
+When set to `true` versioning will be enabled. Specifies Versioning Configuration when passed as an object (documented below).
+Default is `false`.
 
 - **[`logging`](#logging-object-attributes)**: *(Optional `object`)*
 Specifying a configuration for logging access logs (documented below).
