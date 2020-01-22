@@ -2,7 +2,7 @@ FROM golang:1.13.5-alpine3.11
 MAINTAINER "The Mineiros.io Team <hello@mineiros.io>"
 
 ENV TFLINT_VERSION=v0.13.4
-ENV TERRAFORM_VERSION=0.12.19
+ENV TERRAFORM_VERSION=0.12.20
 
 # Set Go flag so it won't require gcc https://github.com/golang/go/issues/26988
 ENV CGO_ENABLED=0
