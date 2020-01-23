@@ -14,7 +14,8 @@ A [Terraform](https://www.terraform.io) 0.12 base module for
 
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
-- [Module Attribute Reference](#module-attribute-reference)
+- [Module Argument Reference](#module-argument-reference)
+- [Module Attributes Reference](#module-attributes-reference)
 - [Module Versioning](#module-versioning)
 - [About Mineiros](#about-mineiros)
 - [Reporting Issues](#reporting-issues)
@@ -73,10 +74,10 @@ module "bucket" {
 }
 ```
 
-## Module Attribute Reference
+## Module Argument Reference
 See [variables.tf](variables.tf) and [examples/](examples) for details and use-cases.
 
-#### Top-level Attributes
+#### Top-level Arguments
 
 ##### Bucket Configuration
 - **`create`**: *(Optional `bool`)*
@@ -302,6 +303,20 @@ Specifies the number of days an object is noncurrent object versions expire.
 - **`storage_class`**: ***(Required `string`)***
 Specifies the Amazon S3 storage class to which you want the noncurrent versions object to transition.
 Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
+
+## Module Attributes Reference
+The following attributes are exported by the module:
+
+- **`bucket`**: All bucket attributes as returned by the
+[`aws_s3_bucket` resource](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#attributes-reference)
+containing all arguments as specified above and the other attributes as specified below.
+- **`id`**: The name of the bucket.
+- **`arn`**: The ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.
+- **`bucket_domain_name`**: The bucket domain name. Will be of format bucketname.s3.amazonaws.com.
+- **`bucket_regional_domain_name`**: The bucket region-specific domain name. The bucket domain name including the region name, please refer here for format. Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin, it will prevent redirect issues from CloudFront to S3 Origin URL.
+- **`hosted_zone_id`**: The Route 53 Hosted Zone ID for this bucket's region.
+- **`region`**: The AWS region this bucket resides in.
+- **`create`**: The `create` argument.
 
 ## Module Versioning
 This Module follows the principles of [Semantic Versioning (SemVer)](https://semver.org/).
