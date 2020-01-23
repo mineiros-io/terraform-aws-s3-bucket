@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# Create two secure S3 Buckets inside the same AWS Account
+# CREATE TWO SECURE S3 BUCKETS INSIDE THE SAME AWS ACCOUNT
 # This template creates an Example S3 Bucket and another Log S3 Bucket.
 # ---------------------------------------------------------------------------------------------------------------------
 
