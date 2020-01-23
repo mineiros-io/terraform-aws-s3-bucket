@@ -2,7 +2,7 @@ FROM golang:1.13.5-alpine3.11
 MAINTAINER "The Mineiros.io Team <hello@mineiros.io>"
 
 ENV TFLINT_VERSION=v0.13.4
-ENV TERRAFORM_VERSION=0.12.19
+ENV TERRAFORM_VERSION=0.12.20
 
 # Set Go flag so it won't require gcc https://github.com/golang/go/issues/26988
 ENV CGO_ENABLED=0
@@ -20,7 +20,7 @@ RUN sed -i '/terraform_.*_linux_amd64.zip/!d' terraform_${TERRAFORM_VERSION}_SHA
 RUN sha256sum -cs terraform_${TERRAFORM_VERSION}_SHA256SUMS
 
 # Unzip and move to bin directory
-RUN unzip terraform_0.12.19_linux_amd64.zip -d /usr/local/bin
+RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin
 
 # Install pre-commit
 RUN pip3 install pre-commit

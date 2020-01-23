@@ -90,13 +90,15 @@ variable "cors_rule" {
 }
 
 variable "versioning" {
-  description = "Map containing versioning configuration."
-  type        = map(string)
-  default     = {}
+  description = "Boolean specifying enabled state of versioning or object containing detailed versioning configuration."
+  type        = any
+  default     = false
 
-  # Example:
+  # Examples:
+  # versioning = true
   # versioning = {
-  #   enabled = true
+  #   enabled    = true
+  #   mfa_delete = true
   # }
 }
 

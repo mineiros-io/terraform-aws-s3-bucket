@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# Create two secure S3 Buckets inside the same AWS Account
+# CREATE TWO SECURE S3 BUCKETS INSIDE THE SAME AWS ACCOUNT
 # This template creates an Example S3 Bucket and another Log S3 Bucket.
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -16,9 +16,7 @@ module "example-app-bucket" {
 
   region = var.aws_region
 
-  versioning = {
-    enabled = true
-  }
+  versioning = true
 
   logging = {
     target_bucket = module.example-log-bucket.id
@@ -77,4 +75,12 @@ module "example-log-bucket" {
       }
     }
   ]
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Do not create the bucket
+# ---------------------------------------------------------------------------------------------------------------------
+module "example-no-bucket" {
+  source = "../.."
+  create = false
 }

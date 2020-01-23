@@ -1,14 +1,32 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# CREATE A S3 BUCKET THAT IS SECURED BY DEFAULT
+# - Bucket public access blocking all set to true
+# - Server-Side-Encryption (SSE) at rest enabled by default (AES256),
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Set default values for the S3 Bucket
+# ---------------------------------------------------------------------------------------------------------------------
+
 locals {
-  cors_enabled       = length(keys(var.cors_rule)) > 0
-  versioning_enabled = length(keys(var.versioning)) > 0
-  logging_enabled    = length(keys(var.logging)) > 0
-  sse_enabled        = length(keys(var.apply_server_side_encryption_by_default)) > 0
+  cors_enabled    = length(keys(var.cors_rule)) > 0
+  logging_enabled = length(keys(var.logging)) > 0
+  sse_enabled     = length(keys(var.apply_server_side_encryption_by_default)) > 0
 
   cors       = local.cors_enabled ? [var.cors_rule] : []
-  versioning = local.versioning_enabled ? [var.versioning] : []
   logging    = local.logging_enabled ? [var.logging] : []
   encryption = local.sse_enabled ? [var.apply_server_side_encryption_by_default] : []
+
+  versioning = try(
+    [{ enabled = tobool(var.versioning) }],
+    length(keys(var.versioning)) > 0 ? [var.versioning] : [],
+    []
+  )
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Create the S3 Bucket
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_s3_bucket" "bucket" {
   count = var.create ? 1 : 0
@@ -121,6 +139,10 @@ resource "aws_s3_bucket" "bucket" {
   }
 }
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Set default values for the S3 Bucket Policy
+# ---------------------------------------------------------------------------------------------------------------------
+
 locals {
   bucket_id  = join("", aws_s3_bucket.bucket.*.id)
   bucket_arn = join("", aws_s3_bucket.bucket.*.arn)
@@ -136,6 +158,11 @@ locals {
   policy_enabled = var.create && (var.policy != null || local.cross_account_enabled)
 }
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Create the S3 Bucket Public Access Block Policy
+# All public access should be blocked per default
+# ---------------------------------------------------------------------------------------------------------------------
+
 resource "aws_s3_bucket_public_access_block" "bucket" {
   count = var.create ? 1 : 0
 
@@ -146,6 +173,12 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Attach a Policy to the S3 Bucket to control:
+# - Cross account bucket actions
+# - Cross account object actions
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_s3_bucket_policy" "bucket" {
   count = local.policy_enabled ? 1 : 0
