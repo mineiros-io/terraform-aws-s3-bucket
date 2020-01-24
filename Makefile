@@ -1,5 +1,7 @@
 #!/usr/bin/env make
 
+TARGET_MOUNT_DIRECTORY = /app/src
+
 # set required build variables if env variables aren't set yet
 ifndef BUILD_VERSION
 	BUILD_VERSION := latest
@@ -13,6 +15,8 @@ ifndef DOCKER_IMAGE
 	DOCKER_IMAGE := ${BUILD_TOOLS}:${BUILD_VERSION}
 endif
 
+
+
 ifndef TERRAFORM_PLAN_FILENAME
 	TERRAFORM_PLAN_FILENAME := tfplan
 endif
@@ -20,7 +24,7 @@ endif
 # Run pre-commit hooks
 docker-run-pre-commit-hooks:
 	docker run --rm \
-		-v ${PWD}:/app/src \
+		-v ${PWD}:${TARGET_MOUNT_DIRECTORY} \
 		${DOCKER_IMAGE} \
 		sh -c "pre-commit install && pre-commit run --all-files"
 
@@ -31,7 +35,7 @@ docker-run-terraform-plan:
 		-e AWS_SECRET_ACCESS_KEY \
 		-e GITHUB_TOKEN \
 		-e GITHUB_ORGANIZATION \
-		-v ${PWD}:/app/src \
+		-v ${PWD}:${TARGET_MOUNT_DIRECTORY} \
 		${DOCKER_IMAGE} \
 		sh -c "terraform init -input=false && terraform plan -input=false"
 
@@ -42,7 +46,7 @@ docker-run-terraform-apply:
 		-e AWS_SECRET_ACCESS_KEY \
 		-e GITHUB_TOKEN \
 		-e GITHUB_ORGANIZATION \
-		-v ${PWD}:/app/src \
+		-v ${PWD}:${TARGET_MOUNT_DIRECTORY} \
 		${DOCKER_IMAGE} \
 		sh -c "terraform init -input=false && \
 		terraform plan -out=${TERRAFORM_PLAN} -input=false &&  \
