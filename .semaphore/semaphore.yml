@@ -20,7 +20,6 @@ blocks:
         - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
       prologue:
         commands:
-#          - export BUILD_VERSION=${SEMAPHORE_GIT_SHA:0:7}
           - checkout --use-cache
       jobs:
         - name: "Pre Commit Hooks"
