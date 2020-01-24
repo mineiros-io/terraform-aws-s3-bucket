@@ -5,74 +5,48 @@ ifndef BUILD_VERSION
 	BUILD_VERSION := latest
 endif
 
-ifndef REPOSITORY_NAME
-	REPOSITORY_NAME := terraform-aws-s3-bucket
+ifndef BUILD_TOOLS
+	BUILD_TOOLS := mineiros/build-tools
 endif
 
-ifndef DOCKER_CACHE_IMAGE
-	DOCKER_CACHE_IMAGE := ${REPOSITORY_NAME}-${BUILD_VERSION}.tar
+ifndef DOCKER_IMAGE
+	DOCKER_IMAGE := ${BUILD_TOOLS}:${BUILD_VERSION}
 endif
 
 ifndef TERRAFORM_PLAN_FILENAME
 	TERRAFORM_PLAN_FILENAME := tfplan
 endif
 
-# builds the image
-docker-build:
-	docker build -t ${REPOSITORY_NAME}:latest -t ${REPOSITORY_NAME}:${BUILD_VERSION} .
-
-# saves docker image to disk
-docker-save:
-	docker save ${REPOSITORY_NAME}:${BUILD_VERSION} > ${DOCKER_CACHE_IMAGE}
-
-# load saved image
-docker-load:
-	docker load < ${DOCKER_CACHE_IMAGE}
-
 # Run pre-commit hooks
-docker-run-pre-commit-hooks: docker-build
+docker-run-pre-commit-hooks:
 	docker run --rm \
-		${REPOSITORY_NAME}:${BUILD_VERSION} \
-		pre-commit run --all-files
-
-# Run pre-commit hooks using a cached image
-docker-run-pre-commit-hooks-from-cache: docker-load
-	docker run --rm \
-		${REPOSITORY_NAME}:${BUILD_VERSION} \
-		pre-commit run --all-files
-
-# Run go test
-docker-run-tests: docker-build
-	docker run --rm \
-		-e AWS_ACCESS_KEY_ID \
-		-e AWS_SECRET_ACCESS_KEY \
-		${REPOSITORY_NAME}:${BUILD_VERSION} \
-		go test -v test/terraform_aws_s3_bucket_test.go
-
-# Run go test using a cached image
-docker-run-tests-from-cache: docker-load
-	docker run --rm \
-		-e AWS_ACCESS_KEY_ID \
-		-e AWS_SECRET_ACCESS_KEY \
-		${REPOSITORY_NAME}:${BUILD_VERSION} \
-		go test -v test/terraform_aws_s3_bucket_test.go
+		-v ${PWD}:/app/src \
+		${DOCKER_IMAGE} \
+		sh -c "pre-commit install && pre-commit run --all-files"
 
 # Run terraform plan
-docker-run-terraform-plan: docker-build
+docker-run-terraform-plan:
 	docker run --rm \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
-		${REPOSITORY_NAME}:${BUILD_VERSION} \
+		-e GITHUB_TOKEN \
+		-e GITHUB_ORGANIZATION \
+		-v ${PWD}:/app/src \
+		${DOCKER_IMAGE} \
 		sh -c "terraform init -input=false && terraform plan -input=false"
 
-# Run terraform plan using a cached image
-docker-run-terraform-plan-from-cache: docker-load
+# Run terraform apply
+docker-run-terraform-apply:
 	docker run --rm \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
-		${REPOSITORY_NAME}:${BUILD_VERSION} \
-		sh -c "terraform init -input=false && terraform plan -input=false"
+		-e GITHUB_TOKEN \
+		-e GITHUB_ORGANIZATION \
+		-v ${PWD}:/app/src \
+		${DOCKER_IMAGE} \
+		sh -c "terraform init -input=false && \
+		terraform plan -out=${TERRAFORM_PLAN} -input=false &&  \
+		terraform apply -input=false -auto-approve ${TERRAFORM_PLAN}"
 
+.PHONY: docker-run-pre-commit-hooks docker-run-terraform-plan docker-run-terraform-apply
 
-.PHONY: docker-build docker-save docker-load docker-run-pre-commit-hooks docker-run-pre-commit-hooks-from-cache \
- docker-run-tests docker-run-tests-from-cache docker-run-terraform-plan docker-run-terraform-plan-from-cache
