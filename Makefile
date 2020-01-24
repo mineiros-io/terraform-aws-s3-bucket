@@ -26,29 +26,14 @@ docker-run-pre-commit-hooks:
 		${DOCKER_IMAGE} \
 		sh -c "pre-commit install && pre-commit run --all-files"
 
-# Run terraform plan
-docker-run-terraform-plan:
+# Run go test
+docker-run-tests:
 	docker run --rm \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
-		-e GITHUB_TOKEN \
-		-e GITHUB_ORGANIZATION \
 		-v ${PWD}:${TARGET_MOUNT_DIRECTORY} \
 		${DOCKER_IMAGE} \
-		sh -c "terraform init -input=false && terraform plan -input=false"
+		go test -v test/terraform_aws_s3_bucket_test.go
 
-# Run terraform apply
-docker-run-terraform-apply:
-	docker run --rm \
-		-e AWS_ACCESS_KEY_ID \
-		-e AWS_SECRET_ACCESS_KEY \
-		-e GITHUB_TOKEN \
-		-e GITHUB_ORGANIZATION \
-		-v ${PWD}:${TARGET_MOUNT_DIRECTORY} \
-		${DOCKER_IMAGE} \
-		sh -c "terraform init -input=false && \
-		terraform plan -out=${TERRAFORM_PLAN} -input=false &&  \
-		terraform apply -input=false -auto-approve ${TERRAFORM_PLAN}"
-
-.PHONY: docker-run-pre-commit-hooks docker-run-terraform-plan docker-run-terraform-apply
+.PHONY: docker-run-pre-commit-hooks docker-run-tests
 

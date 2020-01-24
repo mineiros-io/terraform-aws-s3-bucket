@@ -15,9 +15,6 @@ auto_cancel:
 blocks:
   - name: "Tests"
     task:
-      env_vars:
-        - name: TF_IN_AUTOMATION
-          value: "true"
       secrets:
         - name: TERRAFORM_GITHUB_CREDENTIALS
         - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
@@ -31,4 +28,4 @@ blocks:
             - make docker-run-pre-commit-hooks
         - name: "Unit Tests"
           commands:
-            - make docker-run-terraform-plan
+            - make docker-run-tests
