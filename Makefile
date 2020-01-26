@@ -1,6 +1,5 @@
 MOUNT_TARGET_DIRECTORY  = /app/src
 BUILD_TOOLS_DOCKER_REPO = mineiros/build-tools
-DOCKER                  = $(shell which docker)
 
 # Set default value for environment variable if there aren't set already
 ifndef BUILD_TOOLS_VERSION
