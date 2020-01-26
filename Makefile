@@ -15,6 +15,11 @@ ifndef TERRAFORM_PLAN_FILENAME
 	TERRAFORM_PLAN_FILENAME := tfplan
 endif
 
+GREEN  := $(shell tput -Txterm setaf 2)
+YELLOW := $(shell tput -Txterm setaf 3)
+WHITE  := $(shell tput -Txterm setaf 7)
+RESET  := $(shell tput -Txterm sgr0)
+
 ## Display help for all targets
 help:
 	@awk '/^[a-zA-Z_0-9%:\\\/-]+:/ { \
@@ -32,15 +37,18 @@ help:
 .DEFAULT_GOAL := help
 
 ## Mounts the working directory inside a docker container and runs the pre-commit hooks
-docker-run-pre-commit-hooks: $(DOCKER)
-	@$(DOCKER) run --rm \
+docker-run-pre-commit-hooks:
+	@echo "${GREEN}Start running the pre-commit hooks with docker${RESET}"
+	@docker run --rm \
 		-v ${PWD}:${MOUNT_TARGET_DIRECTORY} \
 		${BUILD_TOOLS_DOCKER_IMAGE} \
 		sh -c "pre-commit install && pre-commit run --all-files"
 
-## Mounts the working directory inside a new container and runs the Go tests. Requires $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY to be set
-docker-run-unit-tests: $(DOCKER)
-	@$(DOCKER) run --rm \
+## Mounts the working directory inside a new container and runs the Go tests.
+## Requires $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY to be set
+docker-run-unit-tests:
+	@echo "${GREEN}Start running the unit tests with docker${RESET}"
+	@docker run --rm \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
 		-v ${PWD}:${MOUNT_TARGET_DIRECTORY} \
