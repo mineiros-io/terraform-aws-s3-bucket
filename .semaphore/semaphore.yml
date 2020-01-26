@@ -27,4 +27,4 @@ blocks:
             - make docker-run-pre-commit-hooks
         - name: "Unit Tests"
           commands:
-            - make docker-run-tests
+            - make docker-run-unit-tests
