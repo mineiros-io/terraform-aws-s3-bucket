@@ -347,10 +347,12 @@ We use GitHub [Issues](https://github.com/mineiros-io/terraform-aws-s3-bucket/is
 Contributions are very welcome!
 We use [Pull Requests](https://github.com/mineiros-io/terraform-aws-s3-bucket/pulls)
 for accepting changes.
-Please see our [Contribution Guidelines](CONTRIBUTION) for full details.
+Please see our
+[Contribution Guidelines](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/CONTRIBUTING.md)
+for full details.
 
 ## License
 This module is licensed under the Apache License Version 2.0, January 2004.
-Please see [LICENSE](LICENSE) for full details.
+Please see [LICENSE](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/LICENSE) for full details.
 
 Copyright &copy; 2020 Mineiros
