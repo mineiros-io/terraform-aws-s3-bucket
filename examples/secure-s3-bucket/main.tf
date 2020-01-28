@@ -14,8 +14,7 @@ provider "aws" {
 module "example-app-bucket" {
   source = "../.."
 
-  region = var.aws_region
-
+  region     = var.aws_region
   versioning = true
 
   logging = {
