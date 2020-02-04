@@ -10,10 +10,6 @@ ifndef BUILD_TOOLS_DOCKER_IMAGE
 	BUILD_TOOLS_DOCKER_IMAGE := ${BUILD_TOOLS_DOCKER_REPO}:${BUILD_TOOLS_VERSION}
 endif
 
-ifndef TERRAFORM_PLAN_FILENAME
-	TERRAFORM_PLAN_FILENAME := tfplan
-endif
-
 GREEN  := $(shell tput -Txterm setaf 2)
 YELLOW := $(shell tput -Txterm setaf 3)
 WHITE  := $(shell tput -Txterm setaf 7)
@@ -36,7 +32,7 @@ help:
 .DEFAULT_GOAL := help
 
 ## Mounts the working directory inside a docker container and runs the pre-commit hooks
-docker-run-pre-commit-hooks:
+docker/pre-commit-hooks:
 	@echo "${GREEN}Start running the pre-commit hooks with docker${RESET}"
 	@docker run --rm \
 		-v ${PWD}:${MOUNT_TARGET_DIRECTORY} \
@@ -44,7 +40,7 @@ docker-run-pre-commit-hooks:
 		sh -c "pre-commit install && pre-commit run --all-files"
 
 ## Mounts the working directory inside a new container and runs the Go tests. Requires $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY to be set
-docker-run-unit-tests:
+docker/unit-tests:
 	@echo "${GREEN}Start running the unit tests with docker${RESET}"
 	@docker run --rm \
 		-e AWS_ACCESS_KEY_ID \
@@ -53,4 +49,4 @@ docker-run-unit-tests:
 		${BUILD_TOOLS_DOCKER_IMAGE} \
 		go test -v -timeout 45m -parallel 128 test/terraform_aws_s3_bucket_test.go
 
-.PHONY: help docker-run-pre-commit-hooks docker-run-tests
+.PHONY: help docker/pre-commit-hooks docker/tests
