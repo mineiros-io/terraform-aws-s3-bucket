@@ -1,10 +1,10 @@
 output "create" {
-  description = "The create input value"
+  description = "Whether or not to create the S3 Bucket."
   value       = var.create
 }
 
 output "bucket" {
-  description = "The full bucket object"
+  description = "The full bucket object."
   value       = try(aws_s3_bucket.bucket[0], {})
 }
 

@@ -9,7 +9,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "region" {
-  description = "If specified, the AWS region this bucket should reside in. (default: region of the callee)"
+  description = "If specified, the AWS region this bucket should reside in. (default: region of the callee)."
   type        = string
   default     = null
 }
@@ -50,6 +50,7 @@ variable "tags" {
   default     = {}
 
   # Example:
+  #
   # tags = {
   #   Name        = "Just an Example"
   #   Environment = "Testing"
@@ -80,6 +81,7 @@ variable "cors_rule" {
   default     = {}
 
   # Example:
+  #
   # cors_rule = {
   #   allowed_headers = ["*"]
   #   allowed_methods = ["PUT", "POST"]
@@ -95,6 +97,7 @@ variable "versioning" {
   default     = false
 
   # Examples:
+  #
   # versioning = true
   # versioning = {
   #   enabled    = true
@@ -108,6 +111,7 @@ variable "logging" {
   default     = {}
 
   # Example:
+  #
   # logging = {
   #   target_bucket = "example-bucket"
   #   target_prefix = "log/"
@@ -116,7 +120,7 @@ variable "logging" {
 
 variable "apply_server_side_encryption_by_default" {
   description = "Map containing server-side encryption configuration."
-  type        = map(any)
+  type        = map(string)
   default = {
     sse_algorithm = "AES256"
   }
@@ -128,6 +132,7 @@ variable "lifecycle_rules" {
   default     = []
 
   # Example:
+  #
   # lifecycle_rules = [
   #   {
   #     id      = "log"
@@ -188,6 +193,7 @@ variable "cross_account_identifiers" {
   default     = []
 
   # Example:
+  #
   # cross_account_identifiers = [
   #   "112233445566",
   #   "112233445566"
