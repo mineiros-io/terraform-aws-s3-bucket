@@ -232,3 +232,9 @@ variable "cross_account_forced_acls" {
     "bucket-owner-full-control"
   ]
 }
+
+variable "create_origin_access_identity" {
+  type        = bool
+  description = "Whether to create an origin access identity (OAI) and policy to be accessible from Cloudfront."
+  default     = false
+}

@@ -50,7 +50,8 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Bucket Public Access Blocking
 
 - **Additional Features**:
-  Cross-Account access policy with forced `bucket-owner-full-control` ACL for direct access
+  Cross-Account access policy with forced `bucket-owner-full-control` ACL for direct access,
+  Cloudfront Origin Access Identity (OAI) and policy
 
 - *Features not yet implemented*:
   Replication Configuration,
@@ -60,7 +61,7 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Bucket Metrics,
   Bucket Inventory,
   S3 Access Points (not yet supported by terraform aws provider),
-  Cloudfront Origin Access Identity (OAI) policy,
+  Origin Access Identity Access (OAI) for already existing OAIs,
   Generate Cross-Account role for OAI enabled buckets if desired,
   Generate KMS key to encrypt objects at rest if desired
 
@@ -192,6 +193,15 @@ Default is `["s3:PutObject", "s3:PutObjectAcl"]`.
 Specifies ACLs to force on new objects for cross account access.
 Default is `["bucket-owner-full-control"]`.
 
+##### Cloudfront Origin Access Identity Access
+- **`create_origin_access_identity`**: *(Optional `bool`)*
+Specifies whether to create and origin access identity and grant it access to read
+from the bucket. This can be used to grant a cloudfront distribution access to
+bucket objects when specifying this bucket as an origin. **Attention:** Objects shared that way need
+to be owned by the account the bucket belongs to and can not be owned be other accounts
+(e.g. when uploaded through cross-account-access).
+Default is `false` (disabled).
+
 #### [`cors_rule`](#bucket-configuration) Object Attributes
 - **`allowed_headers`**: *(Optional `list(string)`)*
 Specifies which headers are allowed.
@@ -308,15 +318,22 @@ Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_A
 The following attributes are exported by the module:
 
 - **`bucket`**: All bucket attributes as returned by the
-[`aws_s3_bucket` resource](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#attributes-reference)
+[`aws_s3_bucket`](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#attributes-reference) resource
 containing all arguments as specified above and the other attributes as specified below.
 - **`id`**: The name of the bucket.
 - **`arn`**: The ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.
 - **`bucket_domain_name`**: The bucket domain name. Will be of format bucketname.s3.amazonaws.com.
-- **`bucket_regional_domain_name`**: The bucket region-specific domain name. The bucket domain name including the region name, please refer here for format. Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin, it will prevent redirect issues from CloudFront to S3 Origin URL.
+- **`bucket_regional_domain_name`**: The bucket region-specific domain name.
+The bucket domain name including the region name, please refer here for format.
+Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin,
+it will prevent redirect issues from CloudFront to S3 Origin URL.
+- **`bucket_policy`**: All bucket policy object attributes as returned by the
+[`s3_bucket_policy`](https://www.terraform.io/docs/providers/aws/r/s3_bucket_policy.html#argument-reference) resource.
 - **`hosted_zone_id`**: The Route 53 Hosted Zone ID for this bucket's region.
 - **`region`**: The AWS region this bucket resides in.
 - **`create`**: The `create` argument.
+- **`origin_access_identity`**: All cloudfront origin access identity object attributes as returned by the
+[`aws_cloudfront_origin_access_identity`](https://www.terraform.io/docs/providers/aws/r/cloudfront_origin_access_identity.html#attribute-reference) resource.
 
 ## Module Versioning
 This Module follows the principles of [Semantic Versioning (SemVer)](https://semver.org/).
