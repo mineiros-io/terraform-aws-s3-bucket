@@ -147,15 +147,17 @@ locals {
   bucket_id  = join("", aws_s3_bucket.bucket.*.id)
   bucket_arn = join("", aws_s3_bucket.bucket.*.arn)
 
-  cross_account_bucket_actions_enabled                 = length(var.cross_account_bucket_actions) > 0
-  cross_account_object_actions_enabled                 = length(var.cross_account_object_actions) > 0
-  cross_account_object_actions_with_forced_acl_enabled = length(var.cross_account_object_actions_with_forced_acl) > 0
+  cross_account_enabled = length(var.cross_account_identifiers) > 0
+
+  cross_account_bucket_actions_enabled                 = local.cross_account_enabled && length(var.cross_account_bucket_actions) > 0
+  cross_account_object_actions_enabled                 = local.cross_account_enabled && length(var.cross_account_object_actions) > 0
+  cross_account_object_actions_with_forced_acl_enabled = local.cross_account_enabled && length(var.cross_account_object_actions_with_forced_acl) > 0
 
   cross_account_actions_enabled = local.cross_account_bucket_actions_enabled || local.cross_account_object_actions_enabled || local.cross_account_object_actions_with_forced_acl_enabled
 
-  cross_account_enabled = length(var.cross_account_identifiers) > 0 && local.cross_account_actions_enabled
+  origin_access_identities_enabled = var.create && var.create_origin_access_identity
 
-  policy_enabled = var.create && (var.policy != null || local.cross_account_enabled)
+  policy_enabled = var.create && (var.policy != null || local.cross_account_actions_enabled || local.origin_access_identities_enabled)
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -178,6 +180,7 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
 # Attach a Policy to the S3 Bucket to control:
 # - Cross account bucket actions
 # - Cross account object actions
+# - Cloudfront origin access identity access
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_s3_bucket_policy" "bucket" {
@@ -197,7 +200,7 @@ data "aws_iam_policy_document" "bucket" {
   source_json = var.policy
 
   dynamic "statement" {
-    for_each = length(var.cross_account_bucket_actions) == 0 ? [] : [1]
+    for_each = local.cross_account_bucket_actions_enabled ? [1] : []
 
     content {
       actions   = var.cross_account_bucket_actions
@@ -211,7 +214,7 @@ data "aws_iam_policy_document" "bucket" {
   }
 
   dynamic "statement" {
-    for_each = length(var.cross_account_object_actions) == 0 ? [] : [1]
+    for_each = local.cross_account_object_actions_enabled ? [1] : []
 
     content {
       actions   = var.cross_account_object_actions
@@ -225,7 +228,7 @@ data "aws_iam_policy_document" "bucket" {
   }
 
   dynamic "statement" {
-    for_each = length(var.cross_account_object_actions_with_forced_acl) == 0 ? [] : [1]
+    for_each = local.cross_account_object_actions_with_forced_acl_enabled ? [1] : []
 
     content {
       actions   = var.cross_account_object_actions_with_forced_acl
@@ -247,4 +250,30 @@ data "aws_iam_policy_document" "bucket" {
       }
     }
   }
+
+  dynamic "statement" {
+    for_each = local.origin_access_identities_enabled ? [{
+      actions   = ["s3:GetObject"]
+      resources = ["${local.bucket_arn}/*"]
+      }, {
+      actions   = ["s3:ListBucket"]
+      resources = [local.bucket_arn]
+
+    }] : []
+    content {
+      actions   = statement.value.actions
+      resources = statement.value.resources
+
+      principals {
+        type        = "AWS"
+        identifiers = aws_cloudfront_origin_access_identity.oai.*.iam_arn
+      }
+    }
+  }
+}
+
+resource "aws_cloudfront_origin_access_identity" "oai" {
+  count = local.origin_access_identities_enabled ? 1 : 0
+
+  comment = format("%s S3 buckets Origin Access Identity to be accessed from CloudFront", local.bucket_id)
 }

@@ -22,6 +22,8 @@ module "example-app-bucket" {
     target_prefix = "log/"
   }
 
+  create_origin_access_identity = true
+
   cors_rule = {
     allowed_headers = ["*"]
     allowed_methods = ["PUT", "POST"]

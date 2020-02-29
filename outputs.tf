@@ -8,6 +8,11 @@ output "bucket" {
   value       = try(aws_s3_bucket.bucket[0], {})
 }
 
+output "bucket_policy" {
+  description = "The full bucket object."
+  value       = try(aws_s3_bucket_policy.bucket[0], {})
+}
+
 output "id" {
   description = "The name of the bucket."
   value       = join("", aws_s3_bucket.bucket.*.id)
@@ -36,4 +41,9 @@ output "hosted_zone_id" {
 output "region" {
   description = "The AWS region this bucket resides in."
   value       = join("", aws_s3_bucket.bucket.*.region)
+}
+
+output "origin_access_identity" {
+  description = "The AWS Cloudfront Origin Access Identity object."
+  value       = try(aws_cloudfront_origin_access_identity.oai[0], {})
 }
