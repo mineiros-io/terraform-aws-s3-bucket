@@ -155,7 +155,7 @@ locals {
 
   cross_account_actions_enabled = local.cross_account_bucket_actions_enabled || local.cross_account_object_actions_enabled || local.cross_account_object_actions_with_forced_acl_enabled
 
-  origin_access_identities_enabled = var.create && var.create_origin_access_identity
+  origin_access_identities_enabled = var.create && (var.create_origin_access_identity || length(var.origin_access_identities) > 0)
 
   policy_enabled = var.create && (var.policy != null || local.cross_account_actions_enabled || local.origin_access_identities_enabled)
 }
@@ -266,14 +266,21 @@ data "aws_iam_policy_document" "bucket" {
 
       principals {
         type        = "AWS"
-        identifiers = aws_cloudfront_origin_access_identity.oai.*.iam_arn
+        identifiers = local.oai_identities
       }
     }
   }
 }
 
+locals {
+  oai_identities = concat(
+    var.origin_access_identities,
+    aws_cloudfront_origin_access_identity.oai.*.iam_arn
+  )
+}
+
 resource "aws_cloudfront_origin_access_identity" "oai" {
-  count = local.origin_access_identities_enabled ? 1 : 0
+  count = var.create && var.create_origin_access_identity ? 1 : 0
 
   comment = format("%s S3 buckets Origin Access Identity to be accessed from CloudFront", local.bucket_id)
 }

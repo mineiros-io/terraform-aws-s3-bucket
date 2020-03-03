@@ -238,3 +238,9 @@ variable "create_origin_access_identity" {
   description = "Whether to create an origin access identity (OAI) and policy to be accessible from Cloudfront."
   default     = false
 }
+
+variable "origin_access_identities" {
+  type        = list(string)
+  description = "Cloudfront Origin Access Identities to grant read-only access to."
+  default     = []
+}
