@@ -48,6 +48,10 @@ module "example-log-bucket" {
   region = var.aws_region
   acl    = "log-delivery-write"
 
+  # this is just for running the example even if logs already exist
+  # this should not be set in production as all objects will be unrecoverably destroyed
+  force_destroy = true
+
   lifecycle_rules = [
     {
       id      = "log"
