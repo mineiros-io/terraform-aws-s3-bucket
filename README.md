@@ -51,7 +51,8 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
 
 - **Additional Features**:
   Cross-Account access policy with forced `bucket-owner-full-control` ACL for direct access,
-  Cloudfront Origin Access Identity (OAI) and policy
+  Create Cloudfront Origin Access Identity (OAI) and grant read-only access,
+  Grant read-only access to existing Cloudfront Origin Access Identity (OAI),
 
 - *Features not yet implemented*:
   Replication Configuration,
@@ -61,7 +62,6 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Bucket Metrics,
   Bucket Inventory,
   S3 Access Points (not yet supported by terraform aws provider),
-  Origin Access Identity Access (OAI) for already existing OAIs,
   Generate Cross-Account role for OAI enabled buckets if desired,
   Generate KMS key to encrypt objects at rest if desired
 
@@ -197,10 +197,21 @@ Default is `["bucket-owner-full-control"]`.
 - **`create_origin_access_identity`**: *(Optional `bool`)*
 Specifies whether to create and origin access identity and grant it access to read
 from the bucket. This can be used to grant a cloudfront distribution access to
-bucket objects when specifying this bucket as an origin. **Attention:** Objects shared that way need
-to be owned by the account the bucket belongs to and can not be owned be other accounts
+bucket objects when specifying this bucket as an origin.
+The Cloudfront distribution must be in the same account.
+For cross account access create the OAI in the account of the cloudfront distribution and use
+`origin_acesss_identities` attribute to enable access.
+**Attention:** Objects shared that way need
+to be owned by the account the bucket belongs to and can not be owned by other accounts
 (e.g. when uploaded through cross-account-access).
 Default is `false` (disabled).
+
+- **`origin_acesss_identities`**: *(Optional `list(string)`)*
+Specify a list of cloudfront origin access identities to grant read-only access to.
+If in addition a new origin access identity is created via the `create_origin_access_identity`
+attribute, all identities will be granted access. **Attention:** Objects shared that way need
+to be owned by the account the bucket belongs to and can not be owned by other accounts
+(e.g. when uploaded through cross-account-access).
 
 #### [`cors_rule`](#bucket-configuration) Object Attributes
 - **`allowed_headers`**: *(Optional `list(string)`)*
