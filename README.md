@@ -53,8 +53,10 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Cross-Account access policy with forced `bucket-owner-full-control` ACL for direct access,
   Create Cloudfront Origin Access Identity (OAI) and grant read-only access,
   Grant read-only access to existing Cloudfront Origin Access Identity (OAI),
+  Allow ELB log delivery
 
 - *Features not yet implemented*:
+  ACL policy grants (aws-provider ~> 2.52.0),
   Replication Configuration,
   Website Configuration,
   S3 Object Locking,
@@ -71,7 +73,7 @@ Most basic usage creating a random named secure AWS bucket.
 ```hcl
 module "bucket" {
   source  = "mineiros-io/s3-bucket/aws"
-  version = "0.0.3"
+  version = "~> 0.1.2"
 }
 ```
 
@@ -212,6 +214,11 @@ If in addition a new origin access identity is created via the `create_origin_ac
 attribute, all identities will be granted access. **Attention:** Objects shared that way need
 to be owned by the account the bucket belongs to and can not be owned by other accounts
 (e.g. when uploaded through cross-account-access).
+
+##### ELB log delivery
+- **`elb_log_delivery`**: *(Optional `bool`)*
+Allow delivery of logs from Elastic Loadbalancers (ELB).
+Default is `true` if `acl` attribute is set to `"log-delivery-write"`, else default is `false`.
 
 #### [`cors_rule`](#bucket-configuration) Object Attributes
 - **`allowed_headers`**: *(Optional `list(string)`)*
