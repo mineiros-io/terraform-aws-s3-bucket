@@ -56,6 +56,7 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Allow ELB log delivery
 
 - *Features not yet implemented*:
+  ACL policy grants (aws-provider ~> 2.52.0),
   Replication Configuration,
   Website Configuration,
   S3 Object Locking,
