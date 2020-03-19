@@ -244,3 +244,9 @@ variable "origin_access_identities" {
   description = "Cloudfront Origin Access Identities to grant read-only access to."
   default     = []
 }
+
+variable "elb_log_delivery" {
+  type        = bool
+  description = "Whether to allow log delivery from ELBs."
+  default     = null
+}
