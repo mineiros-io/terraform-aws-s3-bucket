@@ -218,7 +218,12 @@ to be owned by the account the bucket belongs to and can not be owned by other a
 ##### ELB log delivery
 - **`elb_log_delivery`**: *(Optional `bool`)*
 Allow delivery of logs from Elastic Loadbalancers (ELB).
-Default is `true` if `acl` attribute is set to `"log-delivery-write"`, else default is `false`.
+Default is `true` if `acl` attribute is set to `"log-delivery-write"` or
+`elb_regions` is explicitly set, else default is `false`.
+
+- **`elb_regions`**: *(Optional `list(string)`*
+The names of the region whose AWS ELB account IDs are desired.
+Default is the region from the AWS provider configuration.
 
 #### [`cors_rule`](#bucket-configuration) Object Attributes
 - **`allowed_headers`**: *(Optional `list(string)`)*
