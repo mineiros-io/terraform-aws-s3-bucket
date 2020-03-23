@@ -250,3 +250,9 @@ variable "elb_log_delivery" {
   description = "Whether to allow log delivery from ELBs."
   default     = null
 }
+
+variable "elb_regions" {
+  type        = list(string)
+  description = "The names of the region whose AWS ELB account IDs are desired."
+  default     = []
+}

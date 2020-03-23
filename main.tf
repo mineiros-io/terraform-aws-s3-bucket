@@ -157,7 +157,7 @@ locals {
 
   origin_access_identities_enabled = var.create && (var.create_origin_access_identity || length(var.origin_access_identities) > 0)
 
-  elb_log_delivery = var.elb_log_delivery != null ? var.elb_log_delivery : var.acl == "log-delivery-write"
+  elb_log_delivery = var.elb_log_delivery != null ? var.elb_log_delivery : var.acl == "log-delivery-write" || length(var.elb_regions) > 0
 
   policy_enabled = var.create && (var.policy != null || local.cross_account_actions_enabled || local.origin_access_identities_enabled || local.elb_log_delivery)
 }
@@ -282,7 +282,7 @@ data "aws_iam_policy_document" "bucket" {
 
       principals {
         type        = "AWS"
-        identifiers = [data.aws_elb_service_account.elb.arn]
+        identifiers = local.elb_accounts
       }
     }
   }
@@ -301,4 +301,14 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
   comment = format("%s S3 buckets Origin Access Identity to be accessed from CloudFront", local.bucket_id)
 }
 
+locals {
+  elb_accounts = length(var.elb_regions) > 0 ? data.aws_elb_service_account.elbs.*.arn : [data.aws_elb_service_account.elb.arn]
+}
+
 data "aws_elb_service_account" "elb" {}
+
+data "aws_elb_service_account" "elbs" {
+  count = length(var.elb_regions)
+
+  region = var.elb_regions[count.index]
+}
