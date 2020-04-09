@@ -1,10 +1,11 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # CREATE TWO SECURE S3 BUCKETS INSIDE THE SAME AWS ACCOUNT
-# This template creates an Example S3 Bucket and another Log S3 Bucket.
+# This example creates a S3 Bucket and another Log S3 Bucket.
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = var.aws_region
+  region  = "us-east-1"
+  version = "~> 2.0"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -12,29 +13,20 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "example-app-bucket" {
-  source = "../.."
+  source  = "mineiros-io/s3-bucket/aws"
+  version = "~> 0.1.3"
 
-  region     = var.aws_region
+  bucket_prefix = "app"
+
   versioning = true
 
   logging = {
     target_bucket = module.example-log-bucket.id
-    target_prefix = "log/"
-  }
-
-  create_origin_access_identity = true
-
-  cors_rule = {
-    allowed_headers = ["*"]
-    allowed_methods = ["PUT", "POST"]
-    allowed_origins = ["https://s3-website-test.mineiros.io"]
-    expose_headers  = ["ETag"]
-    max_age_seconds = 3000
+    target_prefix = "log/app/"
   }
 
   tags = {
-    Name        = "Just a S3 Bucket"
-    Environment = "Testing"
+    Name = "SPA S3 Bucket"
   }
 }
 
@@ -43,14 +35,15 @@ module "example-app-bucket" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "example-log-bucket" {
-  source = "../.."
+  source  = "mineiros-io/s3-bucket/aws"
+  version = "~> 0.1.3"
 
-  region = var.aws_region
-  acl    = "log-delivery-write"
+  bucket_prefix = "log"
 
-  # this is just for running the example even if logs already exist
-  # this should not be set in production as all objects will be unrecoverably destroyed
-  force_destroy = true
+  acl = "log-delivery-write"
+
+  # allow elb log delivery from multiple regions
+  elb_regions = ["us-east-1", "eu-west-1"]
 
   lifecycle_rules = [
     {
@@ -67,7 +60,7 @@ module "example-log-bucket" {
       transition = [
         {
           days          = 30
-          storage_class = "STANDARD_IA" # or "ONEZONE_IA"
+          storage_class = "STANDARD_IA"
         },
         {
           days          = 60
@@ -80,21 +73,4 @@ module "example-log-bucket" {
       }
     }
   ]
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
-# Create the Example ELB Log S3 Bucket
-# ---------------------------------------------------------------------------------------------------------------------
-module "example-elb-log-bucket" {
-  source = "../.."
-
-  elb_regions = ["us-east-1", "eu-west-1"]
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
-# Do not create the bucket
-# ---------------------------------------------------------------------------------------------------------------------
-module "example-no-bucket" {
-  source = "../.."
-  create = false
 }

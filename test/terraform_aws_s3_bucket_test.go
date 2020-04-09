@@ -13,7 +13,7 @@ func TestSecureS3Bucket(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
-		TerraformDir: "../examples/secure-s3-bucket",
+		TerraformDir: "./tests/secure-s3-bucket",
 		Vars: map[string]interface{}{
 			"aws_region": awsRegion,
 		},
