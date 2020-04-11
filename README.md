@@ -56,14 +56,15 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Allow ELB log delivery
 
 - *Features not yet implemented*:
-  ACL policy grants (aws-provider ~> 2.52.0),
+  ACL policy grants (aws-provider >= 2.52.0),
+  S3 Access Points (aws-provider >= 2.51.0),
+  Amazon S3 Analytics (aws-provider >= 2.49.0),
   Replication Configuration,
   Website Configuration,
   S3 Object Locking,
   Bucket Notifications,
   Bucket Metrics,
   Bucket Inventory,
-  S3 Access Points (not yet supported by terraform aws provider),
   Generate Cross-Account role for OAI enabled buckets if desired,
   Generate KMS key to encrypt objects at rest if desired
 
