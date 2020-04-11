@@ -256,3 +256,9 @@ variable "elb_regions" {
   description = "The names of the region whose AWS ELB account IDs are desired."
   default     = []
 }
+
+variable "access_points" {
+  type        = list(any)
+  description = "A List of Access Point configurations."
+  default     = []
+}

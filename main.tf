@@ -312,3 +312,37 @@ data "aws_elb_service_account" "elbs" {
 
   region = var.elb_regions[count.index]
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Create S3 Access Points
+# ---------------------------------------------------------------------------------------------------------------------
+locals {
+  aps = { for idx, ap in var.access_points : ap.name => idx }
+}
+
+resource "aws_s3_access_point" "ap" {
+  for_each = var.create ? local.aps : {}
+
+  bucket = local.bucket_id
+  name   = var.access_points[each.value].name
+
+  # optional values
+  account_id = try(var.access_points[each.value].account_id, null)
+  policy     = try(var.access_points[each.value].policy, null)
+
+  # optional but block all public access by default
+  public_access_block_configuration {
+    block_public_acls       = try(var.access_points[each.value].block_public_acls, true)
+    block_public_policy     = try(var.access_points[each.value].block_public_policy, true)
+    ignore_public_acls      = try(var.access_points[each.value].ignore_public_acls, true)
+    restrict_public_buckets = try(var.access_points[each.value].restrict_public_buckets, true)
+  }
+
+  dynamic "vpc_configuration" {
+    for_each = try([var.access_points[each.value].vpc_id], [])
+
+    content {
+      vpc_id = vpc_configuration.each.value
+    }
+  }
+}
