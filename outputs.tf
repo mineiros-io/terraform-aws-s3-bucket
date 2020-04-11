@@ -47,3 +47,8 @@ output "origin_access_identity" {
   description = "The AWS Cloudfront Origin Access Identity object."
   value       = try(aws_cloudfront_origin_access_identity.oai[0], {})
 }
+
+output "access_point" {
+  description = "A map of acccess points keyed by name."
+  value       = try(aws_s3_access_point.ap, {})
+}

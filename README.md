@@ -47,7 +47,8 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Tags
 
 - **Extended S3 Features**:
-  Bucket Public Access Blocking
+  Bucket Public Access Blocking,
+  S3 Access Points
 
 - **Additional Features**:
   Cross-Account access policy with forced `bucket-owner-full-control` ACL for direct access,
@@ -57,7 +58,6 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
 
 - *Features not yet implemented*:
   ACL policy grants (aws-provider >= 2.52.0),
-  S3 Access Points (aws-provider >= 2.51.0),
   Amazon S3 Analytics (aws-provider >= 2.49.0),
   Replication Configuration,
   Website Configuration,
@@ -142,6 +142,20 @@ Default is to use `AES256` encryption.
 
 - **[`lifecycle_rules`](#lifecycle_rules-object-attributes)**: *(Optional `list(object)`)*
 Specifying various rules specifying object lifecycle management (documented below).
+Default is `[]`.
+
+##### S3 Access Points
+- **[`access_points`](#access_point-object-attributes)**: *(Optional `list(access_point)`)*
+Amazon S3 Access Points simplify managing data access at scale for shared datasets in S3.
+Access points are named network endpoints that are attached to buckets that
+you can use to perform S3 object operations, such as `GetObject` and `PutObject`.
+Each access point has distinct permissions and network controls that S3 applies
+for any request that is made through that access point.
+Each access point enforces a customized access point policy that works in
+conjunction with the bucket policy that is attached to the underlying bucket.
+You can configure any access point to accept requests only from a
+virtual private cloud (VPC) to restrict Amazon S3 data access to a private network.
+You can also configure custom block public access settings for each access point.
 Default is `[]`.
 
 ##### S3 bucket-level Public Access Block configuration
@@ -338,26 +352,70 @@ Specifies the number of days an object is noncurrent object versions expire.
 Specifies the Amazon S3 storage class to which you want the noncurrent versions object to transition.
 Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
 
+#### [`access_point`](#s3-access-points) Object Attributes
+- **`name`**: ***(Required `string`)***
+The name you want to assign to this access point.
+
+- **`account_id`**: *(Optional `string`)*
+The AWS account ID for the owner of the bucket for which you want to create an access point.
+Defaults to automatically determined account ID of the Terraform AWS provider.
+
+- **`policy`**: *(Optional `string`)*
+A valid JSON document that specifies the policy that you want to apply to this access point.
+
+- **`vpc_id`**: *(Optional `string`)*
+If set, this access point will only allow connections from the specified VPC ID.
+
+- **`block_public_acls`**: *(Optional `bool`)*
+Whether Amazon S3 should block public ACLs for this bucket.
+Enabling this setting does not affect existing policies or ACLs.
+Default is `true` causing the following behavior:
+  - `PUT Bucket acl` and `PUT Object acl` calls will fail if the specified ACL allows public access.
+  - `PUT Object` calls will fail if the request includes an object ACL.
+
+- **`block_public_policy`**: *(Optional `bool`)*
+Whether Amazon S3 should block public bucket policies for this bucket.
+Enabling this setting does not affect the existing bucket policy.
+Defaults to `true` causing Amazon S3 to:
+  - Reject calls to `PUT Bucket policy` if the specified bucket policy allows public access.
+
+- **`ignore_public_acls`**: *(Optional `bool`)*
+Whether Amazon S3 should ignore public ACLs for this bucket.
+Enabling this setting does not affect the persistence of any existing ACLs and
+doesn't prevent new public ACLs from being set.
+Defaults to `true` causing Amazon S3 to:
+  - Ignore public ACLs on this bucket and any objects that it contains.
+
+- **`restrict_public_buckets`**: *(Optional `bool`)*
+Whether Amazon S3 should restrict public bucket policies for this bucket.
+Enabling this setting does not affect the previously stored bucket policy,
+except that public and cross-account access within the public bucket policy,
+including non-public delegation to specific accounts, is blocked.
+Default is `true` causing the following effect:
+  - Only the bucket owner and AWS Services can access this buckets if it has a public policy.
+
 ## Module Attributes Reference
 The following attributes are exported by the module:
 
+- **`create`**: The `create` argument.
 - **`bucket`**: All bucket attributes as returned by the
 [`aws_s3_bucket`](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#attributes-reference) resource
 containing all arguments as specified above and the other attributes as specified below.
-- **`id`**: The name of the bucket.
-- **`arn`**: The ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.
-- **`bucket_domain_name`**: The bucket domain name. Will be of format bucketname.s3.amazonaws.com.
-- **`bucket_regional_domain_name`**: The bucket region-specific domain name.
-The bucket domain name including the region name, please refer here for format.
-Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin,
-it will prevent redirect issues from CloudFront to S3 Origin URL.
+  - **`id`**: The name of the bucket.
+  - **`arn`**: The ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.
+  - **`bucket_domain_name`**: The bucket domain name. Will be of format bucketname.s3.amazonaws.com.
+  - **`bucket_regional_domain_name`**: The bucket region-specific domain name.
+    The bucket domain name including the region name, please refer here for format.
+    Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin,
+    it will prevent redirect issues from CloudFront to S3 Origin URL.
+  - **`hosted_zone_id`**: The Route 53 Hosted Zone ID for this bucket's region.
+  - **`region`**: The AWS region this bucket resides in.
 - **`bucket_policy`**: All bucket policy object attributes as returned by the
 [`s3_bucket_policy`](https://www.terraform.io/docs/providers/aws/r/s3_bucket_policy.html#argument-reference) resource.
-- **`hosted_zone_id`**: The Route 53 Hosted Zone ID for this bucket's region.
-- **`region`**: The AWS region this bucket resides in.
-- **`create`**: The `create` argument.
 - **`origin_access_identity`**: All cloudfront origin access identity object attributes as returned by the
 [`aws_cloudfront_origin_access_identity`](https://www.terraform.io/docs/providers/aws/r/cloudfront_origin_access_identity.html#attribute-reference) resource.
+- **`access_point`**: A list of
+[`aws_s3_access_point`](https://www.terraform.io/docs/providers/aws/r/s3_access_point.html#attributes-reference) objects keyed by the `name` attribute.
 
 ## Module Versioning
 This Module follows the principles of [Semantic Versioning (SemVer)](https://semver.org/).

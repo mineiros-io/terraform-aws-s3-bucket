@@ -24,6 +24,12 @@ module "example-app-bucket" {
 
   create_origin_access_identity = true
 
+  access_points = [
+    {
+      name = "app"
+    }
+  ]
+
   cors_rule = {
     allowed_headers = ["*"]
     allowed_methods = ["PUT", "POST"]
