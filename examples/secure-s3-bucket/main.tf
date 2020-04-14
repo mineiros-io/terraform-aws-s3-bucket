@@ -14,9 +14,11 @@ provider "aws" {
 
 module "example-app-bucket" {
   source  = "mineiros-io/s3-bucket/aws"
-  version = "~> 0.1.3"
+  version = "~> 0.1.4"
 
   bucket_prefix = "app"
+
+  access_points = [{ name = "app" }]
 
   versioning = true
 
