@@ -10,6 +10,9 @@ ifndef BUILD_TOOLS_DOCKER_IMAGE
 	BUILD_TOOLS_DOCKER_IMAGE := ${BUILD_TOOLS_DOCKER_REPO}:${BUILD_TOOLS_VERSION}
 endif
 
+USER_UID := $(shell id -u)
+USER_GID := $(shell id -g)
+
 GREEN  := $(shell tput -Txterm setaf 2)
 YELLOW := $(shell tput -Txterm setaf 3)
 WHITE  := $(shell tput -Txterm setaf 7)
@@ -36,6 +39,8 @@ docker/pre-commit-hooks:
 	@echo "${GREEN}Start running the pre-commit hooks with docker${RESET}"
 	@docker run --rm \
 		-v ${PWD}:${MOUNT_TARGET_DIRECTORY} \
+		-u ${USER_UID}:${USER_GID} \
+		-e HOME=/tmp \
 		${BUILD_TOOLS_DOCKER_IMAGE} \
 		sh -c "pre-commit install && pre-commit run --all-files"
 
@@ -45,8 +50,10 @@ docker/unit-tests:
 	@docker run --rm \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
+		-u ${USER_UID}:${USER_GID} \
+		-e HOME=/tmp \
 		-v ${PWD}:${MOUNT_TARGET_DIRECTORY} \
 		${BUILD_TOOLS_DOCKER_IMAGE} \
 		go test -v -timeout 45m -parallel 128 test/terraform_aws_s3_bucket_test.go
 
-.PHONY: help docker/pre-commit-hooks docker/tests
+.PHONY: help docker/pre-commit-hooks docker/unit-tests
