@@ -1,18 +1,6 @@
-output "create" {
-  description = "Whether or not to create the S3 Bucket."
-  value       = var.create
-}
-
-output "bucket" {
-  description = "The full bucket object."
-  value       = try(aws_s3_bucket.bucket[0], {})
-}
-
-output "bucket_policy" {
-  description = "The full bucket object."
-  value       = try(aws_s3_bucket_policy.bucket[0], {})
-}
-
+# ------------------------------------------------------------------------------
+# OUTPUT CALCULATED VARIABLES (prefer full objects)
+# ------------------------------------------------------------------------------
 output "id" {
   description = "The name of the bucket."
   value       = join("", aws_s3_bucket.bucket.*.id)
@@ -43,12 +31,37 @@ output "region" {
   value       = join("", aws_s3_bucket.bucket.*.region)
 }
 
+# ------------------------------------------------------------------------------
+# OUTPUT ALL RESOURCES AS FULL OBJECTS
+# ------------------------------------------------------------------------------
+output "bucket" {
+  description = "The full bucket object."
+  value       = try(aws_s3_bucket.bucket[0], null)
+}
+
+output "bucket_policy" {
+  description = "The full bucket object."
+  value       = try(aws_s3_bucket_policy.bucket[0], null)
+}
+
 output "origin_access_identity" {
   description = "The AWS Cloudfront Origin Access Identity object."
-  value       = try(aws_cloudfront_origin_access_identity.oai[0], {})
+  value       = try(aws_cloudfront_origin_access_identity.oai[0], null)
 }
 
 output "access_point" {
   description = "A map of acccess points keyed by name."
-  value       = try(aws_s3_access_point.ap, {})
+  value       = try(aws_s3_access_point.ap, null)
+}
+
+# ------------------------------------------------------------------------------
+# OUTPUT ALL INPUT VARIABLES AS-IS
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# OUTPUT MODULE CONFIGURATION
+# ------------------------------------------------------------------------------
+output "module_enabled" {
+  description = "Whether the module is enabled"
+  value       = var.module_enabled
 }

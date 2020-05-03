@@ -81,13 +81,18 @@ module "bucket" {
 ## Module Argument Reference
 See [variables.tf](variables.tf) and [examples/](examples) for details and use-cases.
 
+#### Module Configuration
+- **`module_enabled`**: *(Optional `bool`)*
+Specifies whether resources in the module will be created.
+Default is `true`.
+
+- **`module_depends_on`**: *(Optional `list(any)`)*
+A list of dependencies. Any object can be assigned to this list to define a hidden
+external dependency.
+
 #### Top-level Arguments
 
 ##### Bucket Configuration
-- **`create`**: *(Optional `bool`)*
-Specifies whether the bucket should be created.
-Default is `true`.
-
 - **`bucket`**: *(Optional `string`, Forces new resource)*
 The name of the bucket. If omitted, Terraform will assign a random, unique name.
 
@@ -397,7 +402,7 @@ Default is `true` causing the following effect:
 ## Module Attributes Reference
 The following attributes are exported by the module:
 
-- **`create`**: The `create` argument.
+- **`module_enabled`**: The `module_enabled` argument.
 - **`bucket`**: All bucket attributes as returned by the
 [`aws_s3_bucket`](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#attributes-reference) resource
 containing all arguments as specified above and the other attributes as specified below.

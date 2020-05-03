@@ -102,5 +102,6 @@ module "example-elb-log-bucket" {
 # ---------------------------------------------------------------------------------------------------------------------
 module "example-no-bucket" {
   source = "../../.."
-  create = false
+
+  module_enabled = false
 }
