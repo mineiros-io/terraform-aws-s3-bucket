@@ -26,12 +26,6 @@ variable "bucket_prefix" {
   default     = null
 }
 
-variable "create" {
-  description = "Whether the bucket should be created."
-  type        = bool
-  default     = true
-}
-
 variable "acl" {
   description = "The canned ACL to apply. https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl"
   type        = string
@@ -260,5 +254,22 @@ variable "elb_regions" {
 variable "access_points" {
   type        = list(any)
   description = "A List of Access Point configurations."
+  default     = []
+}
+
+# ------------------------------------------------------------------------------
+# OPTIONAL MODULE CONFIGURATION PARAMETERS
+# These variables are used to configure the module.
+# See https://medium.com/mineiros/the-ultimate-guide-on-how-to-write-terraform-modules-part-1-81f86d31f024
+# ------------------------------------------------------------------------------
+variable "module_enabled" {
+  type        = bool
+  description = "(optional) Whether to create resources within the module or not. Default is true."
+  default     = true
+}
+
+variable "module_depends_on" {
+  type        = list(any)
+  description = "(optional) A list of external resources the module depends_on. Default is []."
   default     = []
 }

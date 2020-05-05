@@ -29,7 +29,7 @@ locals {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_s3_bucket" "bucket" {
-  count = var.create ? 1 : 0
+  count = var.module_enabled ? 1 : 0
 
   bucket              = var.bucket
   bucket_prefix       = var.bucket_prefix
@@ -137,6 +137,8 @@ resource "aws_s3_bucket" "bucket" {
       }
     }
   }
+
+  depends_on = [var.module_depends_on]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -155,11 +157,11 @@ locals {
 
   cross_account_actions_enabled = local.cross_account_bucket_actions_enabled || local.cross_account_object_actions_enabled || local.cross_account_object_actions_with_forced_acl_enabled
 
-  origin_access_identities_enabled = var.create && (var.create_origin_access_identity || length(var.origin_access_identities) > 0)
+  origin_access_identities_enabled = var.module_enabled && (var.create_origin_access_identity || length(var.origin_access_identities) > 0)
 
   elb_log_delivery = var.elb_log_delivery != null ? var.elb_log_delivery : var.acl == "log-delivery-write" || length(var.elb_regions) > 0
 
-  policy_enabled = var.create && (var.policy != null || local.cross_account_actions_enabled || local.origin_access_identities_enabled || local.elb_log_delivery)
+  policy_enabled = var.module_enabled && (var.policy != null || local.cross_account_actions_enabled || local.origin_access_identities_enabled || local.elb_log_delivery)
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -168,7 +170,7 @@ locals {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_s3_bucket_public_access_block" "bucket" {
-  count = var.create ? 1 : 0
+  count = var.module_enabled ? 1 : 0
 
   bucket = local.bucket_id
 
@@ -176,6 +178,8 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
   block_public_policy     = var.block_public_policy
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
+
+  depends_on = [var.module_depends_on]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -188,12 +192,13 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
 resource "aws_s3_bucket_policy" "bucket" {
   count = local.policy_enabled ? 1 : 0
 
-  depends_on = [
-    aws_s3_bucket_public_access_block.bucket
-  ]
-
   bucket = local.bucket_id
   policy = join("", data.aws_iam_policy_document.bucket.*.json)
+
+  depends_on = [
+    var.module_depends_on,
+    aws_s3_bucket_public_access_block.bucket,
+  ]
 }
 
 data "aws_iam_policy_document" "bucket" {
@@ -296,9 +301,11 @@ locals {
 }
 
 resource "aws_cloudfront_origin_access_identity" "oai" {
-  count = var.create && var.create_origin_access_identity ? 1 : 0
+  count = var.module_enabled && var.create_origin_access_identity ? 1 : 0
 
   comment = format("%s S3 buckets Origin Access Identity to be accessed from CloudFront", local.bucket_id)
+
+  depends_on = [var.module_depends_on]
 }
 
 locals {
@@ -321,7 +328,7 @@ locals {
 }
 
 resource "aws_s3_access_point" "ap" {
-  for_each = var.create ? local.aps : {}
+  for_each = var.module_enabled ? local.aps : {}
 
   bucket = local.bucket_id
   name   = var.access_points[each.value].name
@@ -345,4 +352,6 @@ resource "aws_s3_access_point" "ap" {
       vpc_id = vpc_configuration.each.value
     }
   }
+
+  depends_on = [var.module_depends_on]
 }
