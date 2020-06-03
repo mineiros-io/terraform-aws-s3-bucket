@@ -49,7 +49,7 @@ We also recommend updating the automated tests before updating any code
 That means that you should add or update a test case, run all tests and verify that the new test fails with a clear
 error message and then start implementing the code changes to get that test to pass.
 
-The test folder in every repo will have documentation on how to run the tests locally.
+The test folder in every repository will have documentation on how to run the tests locally.
 
 ## Update the code
 
