@@ -39,6 +39,7 @@ A [Terraform](https://www.terraform.io) 0.12 base module for
 - [About Mineiros](#about-mineiros)
 - [Reporting Issues](#reporting-issues)
 - [Contributing](#contributing)
+- [Makefile Targets](#makefile-targets)
 - [License](#license)
 
 ## Module Features
@@ -464,42 +465,49 @@ containing all arguments as specified above and the other attributes as specifie
 [`aws_s3_access_point`](https://www.terraform.io/docs/providers/aws/r/s3_access_point.html#attributes-reference) objects keyed by the `name` attribute.
 
 ## Module Versioning
+
 This Module follows the principles of [Semantic Versioning (SemVer)](https://semver.org/).
 
-Given a version number `MAJOR.MINOR.PATCH`, we increment the:
-1. `MAJOR` version when we make incompatible changes,
-1. `MINOR` version when we add functionality in a backwards compatible manner, and
-1. `PATCH` version when we make backwards compatible bug fixes.
+Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following constructs:
+
+1. Use the `MAJOR` version for incompatible changes.
+1. Use the `MINOR` version when adding functionality in a backwards compatible manner.
+1. Use the `PATCH` version when introducing backwards compatible bug fixes.
 
 ### Backwards compatibility in `0.0.z` and `0.y.z` version
 
-- Backwards compatibility in versions `0.0.z` is **not guaranteed** when `z` is increased. (Initial development)
-- Backwards compatibility in versions `0.y.z` is **not guaranteed** when `y` is increased. (Pre-release)
+- In the context of initial development, backwards compatibility in versions `0.0.z` is **not guaranteed** when `z` is
+  increased. (Initial development)
+- In the context of pre-release, backwards compatibility in versions `0.y.z` is **not guaranteed** when `y` is
+  increased. (Pre-release)
 
 ## About Mineiros
 
-Mineiros is a [DevOps as a Service](https://www.mineiros.io/?ref=terraform-aws-s3-bucket) Company based in Berlin, Germany.
-We offer Commercial Support for all of our projects, just send us an email to [hello@mineiros.io](mailto:hello@mineiros.io).
+Mineiros is a [DevOps as a Service](https://mineiros.io/?ref=terraform-aws-s3-bucket) company based in Berlin, Germany.
+We offer commercial support for all of our projects and encourage you to reach out if you have any questions or need help.
+Feel free to send us an email at [hello@mineiros.io](mailto:hello@mineiros.io).
 
 We can also help you with:
 
-- Terraform Modules for all types of infrastructure such as VPC's, Docker clusters,
-databases, logging and monitoring, CI, etc.
-- Complex Cloud- and Multi Cloud environments.
-- Consulting & Training on AWS, Terraform and DevOps.
+- Terraform modules for all types of infrastructure such as VPCs, Docker clusters, databases, logging and monitoring, CI, etc.
+- Consulting & training on AWS, Terraform and DevOps
 
 ## Reporting Issues
 
-We use GitHub [Issues](https://github.com/mineiros-io/terraform-aws-s3-bucket/issues) to track community reported issues and missing features.
+We use GitHub [Issues](https://github.com/mineiros-io/terraform-aws-s3-bucket/issues)
+to track community reported issues and missing features.
 
 ## Contributing
 
-Contributions are very welcome!
-We use [Pull Requests](https://github.com/mineiros-io/terraform-aws-s3-bucket/pulls)
-for accepting changes.
-Please see our
-[Contribution Guidelines](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/CONTRIBUTING.md)
-for full details.
+Contributions are always encouraged and welcome! For the process of accepting changes, we use
+[Pull Requests](https://github.com/mineiros-io/terraform-aws-s3-bucket/pulls). If you'd like more information, please
+see our [Contribution Guidelines](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/CONTRIBUTING.md).
+
+## Makefile Targets
+
+This repository comes with a handy
+[Makefile](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/Makefile).
+Run `make help` to see details on each available target.
 
 ## License
 
