@@ -3,7 +3,7 @@ BUILD_TOOLS_DOCKER_REPO = mineiros/build-tools
 
 # Set default value for environment variable if there aren't set already
 ifndef BUILD_TOOLS_VERSION
-	BUILD_TOOLS_VERSION := v0.5.3
+	BUILD_TOOLS_VERSION := v0.5.4
 endif
 
 ifndef BUILD_TOOLS_DOCKER_IMAGE
