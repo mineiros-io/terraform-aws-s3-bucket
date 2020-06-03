@@ -1,10 +1,10 @@
-<img src="https://i.imgur.com/t8IkKoZl.png" width="200"/>
+[<img src="https://raw.githubusercontent.com/mineiros-io/brand/master/mineiros-primary-logo.svg" width="400"/>](https://www.mineiros.io/?ref=terraform-aws-s3-bucket)
 
-[![Maintained by Mineiros.io](https://img.shields.io/badge/maintained%20by-mineiros.io-00607c.svg)](https://www.mineiros.io/ref=repo_terraform-github-repository)
 [![Build Status](https://mineiros.semaphoreci.com/badges/terraform-aws-s3-bucket/branches/master.svg?style=shields)](https://mineiros.semaphoreci.com/projects/terraform-aws-s3-bucket)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/mineiros-io/terraform-aws-s3-bucket.svg?label=latest&sort=semver)](https://github.com/mineiros-io/terraform-aws-s3-bucket/releases)
-[![Terraform Version](https://img.shields.io/badge/terraform-~%3E%200.12.20-brightgreen.svg)](https://github.com/hashicorp/terraform/releases)
-[![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![license](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Terraform Version](https://img.shields.io/badge/terraform-~%3E%200.12.20-623CE4.svg)](https://github.com/hashicorp/terraform/releases)
+[<img src="https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack">](https://join.slack.com/t/mineiros-community/shared_invite/zt-ehidestg-aLGoIENLVs6tvwJ11w9WGg)
 
 # terraform-aws-s3-bucket Example
 
@@ -17,19 +17,23 @@ ELBs in two different regions. Lifecycle rules are set up on the log bucket to m
 cheaper storage.
 
 ## About Mineiros
+
 Mineiros is a [DevOps as a Service](https://mineiros.io/) Company based in Berlin, Germany.
 We offer Commercial Support for all of our projects, just send us an email to [hello@mineiros.io](mailto:hello@mineiros.io).
 
 We can also help you with:
+
 - Terraform Modules for all types of infrastructure such as VPC's, Docker clusters,
-databases, logging and monitoring, CI, etc.
+  databases, logging and monitoring, CI, etc.
 - Complex Cloud- and Multi Cloud environments.
 - Consulting & Training on AWS, Terraform and DevOps.
 
 ## Reporting Issues
+
 We use GitHub [Issues](https://github.com/mineiros-io/terraform-aws-s3-bucket/issues) to track community reported issues and missing features.
 
 ## Contributing
+
 Contributions are very welcome!
 We use [Pull Requests](https://github.com/mineiros-io/terraform-aws-s3-bucket/pulls)
 for accepting changes.
@@ -38,6 +42,7 @@ Please see our
 for full details.
 
 ## License
+
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/LICENSE) for full details.
 
