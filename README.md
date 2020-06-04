@@ -1,10 +1,10 @@
-<img src="https://raw.githubusercontent.com/mineiros-io/brand/master/mineiros-vertial-logo-smaller-font.svg" width="200"/>
+[<img src="https://raw.githubusercontent.com/mineiros-io/brand/master/mineiros-primary-logo.svg" width="400"/>](https://www.mineiros.io/?ref=terraform-aws-s3-bucket)
 
-[![Maintained by Mineiros.io](https://img.shields.io/badge/maintained%20by-mineiros.io-f32752.svg)](https://mineiros.io/?ref=repo_terraform-github-repository)
 [![Build Status](https://mineiros.semaphoreci.com/badges/terraform-aws-s3-bucket/branches/master.svg?style=shields)](https://mineiros.semaphoreci.com/projects/terraform-aws-s3-bucket)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/mineiros-io/terraform-aws-s3-bucket.svg?label=latest&sort=semver)](https://github.com/mineiros-io/terraform-aws-s3-bucket/releases)
-[![Terraform Version](https://img.shields.io/badge/terraform-~%3E%200.12.20-brightgreen.svg)](https://github.com/hashicorp/terraform/releases)
-[![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![license](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Terraform Version](https://img.shields.io/badge/terraform-~%3E%200.12.20-623CE4.svg)](https://github.com/hashicorp/terraform/releases)
+[<img src="https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack">](https://join.slack.com/t/mineiros-community/shared_invite/zt-ehidestg-aLGoIENLVs6tvwJ11w9WGg)
 
 # terraform-aws-s3-bucket
 
@@ -15,14 +15,35 @@ A [Terraform](https://www.terraform.io) 0.12 base module for
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
 - [Module Argument Reference](#module-argument-reference)
+  - [Module Configuration](#module-configuration)
+  - [Top-level Arguments](#top-level-arguments)
+    - [Bucket Configuration](#bucket-configuration)
+    - [S3 Access Points](#s3-access-points)
+    - [S3 bucket-level Public Access Block Configuration](#s3-bucket-level-public-access-block-configuration)
+    - [Cross Account Access Configuration](#cross-account-access-configuration)
+    - [Cloudfront Origin Access Identity Access](#cloudfront-origin-access-identity-access)
+    - [ELB Log Delivery](#elb-log-delivery)
+    - [`cors_rule` Object Attributes](#cors_rule-object-attributes)
+    - [`versioning` Object Attributes](#versioning-object-attributes)
+    - [`logging` Object Attributes](#logging-object-attributes)
+    - [`apply_server_side_encryption_by_default` Object Attributes](#apply_server_side_encryption_by_default-object-attributes)
+    - [`lifecycle_rules` Object Attributes](#lifecycle_rules-object-attributes)
+      - [`expiration` Object Attributes](#expiration-object-attributes)
+      - [`transition` Object Attributes](#transition-object-attributes)
+      - [`noncurrent_version_expiration` Object Attributes](#noncurrent_version_expiration-object-attributes)
+      - [`noncurrent_version_transition` Object Attributes](#noncurrent_version_transition-object-attributes)
+    - [`access_point` Object Attributes](#access_point-object-attributes)
 - [Module Attributes Reference](#module-attributes-reference)
 - [Module Versioning](#module-versioning)
+  - [Backwards compatibility in `0.0.z` and `0.y.z` version](#backwards-compatibility-in-00z-and-0yz-version)
 - [About Mineiros](#about-mineiros)
 - [Reporting Issues](#reporting-issues)
 - [Contributing](#contributing)
+- [Makefile Targets](#makefile-targets)
 - [License](#license)
 
 ## Module Features
+
 In contrast to the plain `aws_s3_bucket` resource this module creates secure
 buckets by default. While all security features can be disabled as needed best practices
 are pre-configured.
@@ -70,6 +91,7 @@ of the bucket enforcing `bucket-owner-full-control` acl for objects created by o
   Generate KMS key to encrypt objects at rest if desired
 
 ## Getting Started
+
 Most basic usage creating a random named secure AWS bucket.
 
 ```hcl
@@ -80,10 +102,13 @@ module "bucket" {
 ```
 
 ## Module Argument Reference
+
 See [variables.tf](variables.tf) and [examples/](examples) for details and use-cases.
 
-#### Module Configuration
+### Module Configuration
+
 - **`module_enabled`**: *(Optional `bool`)*
+
 Specifies whether resources in the module will be created.
 Default is `true`.
 
@@ -91,9 +116,10 @@ Default is `true`.
 A list of dependencies. Any object can be assigned to this list to define a hidden
 external dependency.
 
-#### Top-level Arguments
+### Top-level Arguments
 
-##### Bucket Configuration
+#### Bucket Configuration
+
 - **`bucket`**: *(Optional `string`, Forces new resource)*
 The name of the bucket. If omitted, Terraform will assign a random, unique name.
 
@@ -150,7 +176,8 @@ Default is to use `AES256` encryption.
 Specifying various rules specifying object lifecycle management (documented below).
 Default is `[]`.
 
-##### S3 Access Points
+#### S3 Access Points
+
 - **[`access_points`](#access_point-object-attributes)**: *(Optional `list(access_point)`)*
 Amazon S3 Access Points simplify managing data access at scale for shared datasets in S3.
 Access points are named network endpoints that are attached to buckets that
@@ -164,7 +191,8 @@ virtual private cloud (VPC) to restrict Amazon S3 data access to a private netwo
 You can also configure custom block public access settings for each access point.
 Default is `[]`.
 
-##### S3 bucket-level Public Access Block configuration
+#### S3 bucket-level Public Access Block Configuration
+
 - **`block_public_acls`**: *(Optional `bool`)*
 Whether Amazon S3 should block public ACLs for this bucket.
 Enabling this setting does not affect existing policies or ACLs.
@@ -193,7 +221,8 @@ including non-public delegation to specific accounts, is blocked.
 Default is `true` causing the following effect:
   - Only the bucket owner and AWS Services can access this buckets if it has a public policy.
 
-##### Cross Account Access Configuration
+#### Cross Account Access Configuration
+
 - **`cross_account_identifiers`**: *(Optional `list(sring)`)*
 Specifies identifiers that should be granted cross account access to.
 If this list is empty Cross Account Access is not configured and all other
@@ -216,7 +245,8 @@ Default is `["s3:PutObject", "s3:PutObjectAcl"]`.
 Specifies ACLs to force on new objects for cross account access.
 Default is `["bucket-owner-full-control"]`.
 
-##### Cloudfront Origin Access Identity Access
+#### Cloudfront Origin Access Identity Access
+
 - **`create_origin_access_identity`**: *(Optional `bool`)*
 Specifies whether to create and origin access identity and grant it access to read
 from the bucket. This can be used to grant a cloudfront distribution access to
@@ -236,7 +266,8 @@ attribute, all identities will be granted access. **Attention:** Objects shared 
 to be owned by the account the bucket belongs to and can not be owned by other accounts
 (e.g. when uploaded through cross-account-access).
 
-##### ELB log delivery
+#### ELB Log Delivery
+
 - **`elb_log_delivery`**: *(Optional `bool`)*
 Allow delivery of logs from Elastic Loadbalancers (ELB).
 Default is `true` if `acl` attribute is set to `"log-delivery-write"` or
@@ -247,6 +278,7 @@ The names of the region whose AWS ELB account IDs are desired.
 Default is the region from the AWS provider configuration.
 
 #### [`cors_rule`](#bucket-configuration) Object Attributes
+
 - **`allowed_headers`**: *(Optional `list(string)`)*
 Specifies which headers are allowed.
 Default is `[]`.
@@ -266,6 +298,7 @@ Specifies time in seconds that browser can cache the response for a preflight re
 Default is `null`.
 
 #### [`versioning`](#bucket-configuration) Object Attributes
+
 - **`enabled`**: *(Optional `bool`)*
 Once you version-enable a bucket, it can never return to an unversioned state.
 You can, however, suspend versioning on that bucket.
@@ -277,6 +310,7 @@ permanently delete an object version.
 Default is `false`.
 
 #### [`logging`](#bucket-configuration) Object Attributes
+
 - **`target_bucket`**: ***(Required `string`)***
 The name of the bucket that will receive the log objects.
 
@@ -285,6 +319,7 @@ To specify a key prefix for log objects.
 Default is `null`.
 
 #### [`apply_server_side_encryption_by_default`](#bucket-configuration) Object Attributes
+
 - **`sse_algorithm`**: *(Optional `string`)*
 The server-side encryption algorithm to use. Valid values are `AES256` and `aws:kms`.
 Default is `aws:kms` when `kms_master_key_id` is specified else `AES256`
@@ -294,6 +329,7 @@ The AWS KMS master key ID used for the SSE-KMS encryption. The default `aws/s3` 
 Default is `null`.
 
 #### [`lifecycle_rules`](#bucket-configuration) Object Attributes
+
 - **`id`**: *(Optional `string`)*
 Unique identifier for the rule.
 
@@ -326,6 +362,7 @@ Specifies when noncurrent object versions transitions (documented below).
 At least one of `expiration`, `transition`, `noncurrent_version_expiration`, `noncurrent_version_transition` must be specified.
 
 ##### [`expiration`](#lifecycle_rules-object-attributes) Object Attributes
+
 - **`date`**: *(Optional `string`)*
 Specifies the date after which you want the corresponding action to take effect.
 
@@ -336,6 +373,7 @@ Specifies the number of days after object creation when the specific rule action
 On a versioned bucket (versioning-enabled or versioning-suspended bucket), you can add this element in the lifecycle configuration to direct Amazon S3 to delete expired object delete markers.
 
 ##### [`transition`](#lifecycle_rules-object-attributes) Object Attributes
+
 - **`date`**: *(Optional `string`)*
 Specifies the date after which you want the corresponding action to take effect.
 
@@ -347,10 +385,12 @@ Specifies the Amazon S3 storage class to which you want the object to transition
 Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
 
 ##### [`noncurrent_version_expiration`](#lifecycle_rules-object-attributes) Object Attributes
+
 - **`days`**: ***(Required `number`)***
 Specifies the number of days an object is noncurrent object versions expire.
 
 ##### [`noncurrent_version_transition`](#lifecycle_rules-object-attributes) Object Attributes
+
 - **`days`**: ***(Required `number`)***
 Specifies the number of days an object is noncurrent object versions expire.
 
@@ -359,6 +399,7 @@ Specifies the Amazon S3 storage class to which you want the noncurrent versions 
 Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
 
 #### [`access_point`](#s3-access-points) Object Attributes
+
 - **`name`**: ***(Required `string`)***
 The name you want to assign to this access point.
 
@@ -401,6 +442,7 @@ Default is `true` causing the following effect:
   - Only the bucket owner and AWS Services can access this buckets if it has a public policy.
 
 ## Module Attributes Reference
+
 The following attributes are exported by the module:
 
 - **`module_enabled`**: The `module_enabled` argument.
@@ -424,40 +466,53 @@ containing all arguments as specified above and the other attributes as specifie
 [`aws_s3_access_point`](https://www.terraform.io/docs/providers/aws/r/s3_access_point.html#attributes-reference) objects keyed by the `name` attribute.
 
 ## Module Versioning
+
 This Module follows the principles of [Semantic Versioning (SemVer)](https://semver.org/).
 
-Given a version number `MAJOR.MINOR.PATCH`, we increment the:
-1) `MAJOR` version when we make incompatible changes,
-2) `MINOR` version when we add functionality in a backwards compatible manner, and
-3) `PATCH` version when we make backwards compatible bug fixes.
+Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following constructs:
 
-#### Backwards compatibility in `0.0.z` and `0.y.z` version
-- Backwards compatibility in versions `0.0.z` is **not guaranteed** when `z` is increased. (Initial development)
-- Backwards compatibility in versions `0.y.z` is **not guaranteed** when `y` is increased. (Pre-release)
+1. Use the `MAJOR` version for incompatible changes.
+1. Use the `MINOR` version when adding functionality in a backwards compatible manner.
+1. Use the `PATCH` version when introducing backwards compatible bug fixes.
+
+### Backwards compatibility in `0.0.z` and `0.y.z` version
+
+- In the context of initial development, backwards compatibility in versions `0.0.z` is **not guaranteed** when `z` is
+  increased. (Initial development)
+- In the context of pre-release, backwards compatibility in versions `0.y.z` is **not guaranteed** when `y` is
+  increased. (Pre-release)
 
 ## About Mineiros
-Mineiros is a [DevOps as a Service](https://mineiros.io/) Company based in Berlin, Germany.
-We offer Commercial Support for all of our projects, just send us an email to [hello@mineiros.io](mailto:hello@mineiros.io).
+
+Mineiros is a [DevOps as a Service](https://mineiros.io/?ref=terraform-aws-s3-bucket) company based in Berlin, Germany.
+We offer commercial support for all of our projects and encourage you to reach out if you have any questions or need help.
+Feel free to send us an email at [hello@mineiros.io](mailto:hello@mineiros.io).
 
 We can also help you with:
-- Terraform Modules for all types of infrastructure such as VPC's, Docker clusters,
-databases, logging and monitoring, CI, etc.
-- Complex Cloud- and Multi Cloud environments.
-- Consulting & Training on AWS, Terraform and DevOps.
+
+- Terraform modules for all types of infrastructure such as VPCs, Docker clusters, databases, logging and monitoring, CI, etc.
+- Consulting & training on AWS, Terraform and DevOps
 
 ## Reporting Issues
-We use GitHub [Issues](https://github.com/mineiros-io/terraform-aws-s3-bucket/issues) to track community reported issues and missing features.
+
+We use GitHub [Issues](https://github.com/mineiros-io/terraform-aws-s3-bucket/issues)
+to track community reported issues and missing features.
 
 ## Contributing
-Contributions are very welcome!
-We use [Pull Requests](https://github.com/mineiros-io/terraform-aws-s3-bucket/pulls)
-for accepting changes.
-Please see our
-[Contribution Guidelines](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/CONTRIBUTING.md)
-for full details.
+
+Contributions are always encouraged and welcome! For the process of accepting changes, we use
+[Pull Requests](https://github.com/mineiros-io/terraform-aws-s3-bucket/pulls). If you'd like more information, please
+see our [Contribution Guidelines](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/CONTRIBUTING.md).
+
+## Makefile Targets
+
+This repository comes with a handy
+[Makefile](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/Makefile).
+Run `make help` to see details on each available target.
 
 ## License
+
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE](https://github.com/mineiros-io/terraform-aws-s3-bucket/blob/master/LICENSE) for full details.
 
-Copyright &copy; 2020 Mineiros
+Copyright &copy; 2020 Mineiros GmbH
