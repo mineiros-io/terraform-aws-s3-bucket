@@ -108,6 +108,7 @@ See [variables.tf](variables.tf) and [examples/](examples) for details and use-c
 ### Module Configuration
 
 - **`module_enabled`**: *(Optional `bool`)*
+
 Specifies whether resources in the module will be created.
 Default is `true`.
 
