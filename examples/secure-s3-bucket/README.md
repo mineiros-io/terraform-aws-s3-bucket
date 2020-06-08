@@ -1,4 +1,4 @@
-[<img src="https://raw.githubusercontent.com/mineiros-io/brand/master/mineiros-primary-logo.svg" width="400"/>](https://www.mineiros.io/?ref=terraform-aws-s3-bucket)
+[<img src="https://raw.githubusercontent.com/mineiros-io/brand/3bffd30e8bdbbde32c143e2650b2faa55f1df3ea/mineiros-primary-logo.svg" width="400"/>](https://www.mineiros.io/?ref=terraform-aws-s3-bucket)
 
 [![Build Status](https://mineiros.semaphoreci.com/badges/terraform-aws-s3-bucket/branches/master.svg?style=shields)](https://mineiros.semaphoreci.com/projects/terraform-aws-s3-bucket)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/mineiros-io/terraform-aws-s3-bucket.svg?label=latest&sort=semver)](https://github.com/mineiros-io/terraform-aws-s3-bucket/releases)
