@@ -14,7 +14,7 @@ func TestSecureS3Bucket(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
-		TerraformDir: "./tests/secure-s3-bucket",
+		TerraformDir: "./secure-s3-bucket",
 		Vars: map[string]interface{}{
 			"aws_region": awsRegion,
 		},
@@ -25,5 +25,5 @@ func TestSecureS3Bucket(t *testing.T) {
 	defer terraform.Destroy(t, terraformOptions)
 
 	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
-	terraform.InitAndApply(t, terraformOptions)
+	terraform.InitAndApplyAndIdempotent(t, terraformOptions)
 }

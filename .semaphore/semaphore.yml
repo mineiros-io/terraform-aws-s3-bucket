@@ -1,9 +1,20 @@
 version: v1.0
-name: "Terraform-Aws-S3-Bucket CI Pipeline"
+name: "CI/CD Pipeline"
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+
+global_job_config:
+  secrets:
+    - name: TERRAFORM_GITHUB_CREDENTIALS
+    - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
+  #   - name: private-ssh-key-with-iac-library-access
+  prologue:
+    commands:
+      - checkout --use-cache
+      # - chmod 400 ~/.ssh/id_rsa_iac_library
+      # - ssh-add ~/.ssh/id_rsa_iac_library
 
 # Enable auto-cancel builds of branches, tags and pull-requests.
 # The queued strategy will only cancel pipelines that are waiting in the queue and have not yet started to run.
@@ -15,16 +26,10 @@ auto_cancel:
 blocks:
   - name: "Tests"
     task:
-      secrets:
-        - name: TERRAFORM_GITHUB_CREDENTIALS
-        - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
-      prologue:
-        commands:
-          - checkout --use-cache
       jobs:
         - name: "Pre Commit Hooks"
           commands:
-            - make docker/pre-commit-hooks
+            - make test/pre-commit
         - name: "Unit Tests"
           commands:
-            - make docker/unit-tests
+            - make test/unit-tests
