@@ -12,7 +12,7 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "example-app-bucket" {
-  source = "../../.."
+  source = "../.."
 
   region     = var.aws_region
   versioning = true
@@ -49,7 +49,7 @@ module "example-app-bucket" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "example-log-bucket" {
-  source = "../../.."
+  source = "../.."
 
   region = var.aws_region
   acl    = "log-delivery-write"
@@ -92,7 +92,7 @@ module "example-log-bucket" {
 # Create the Example ELB Log S3 Bucket
 # ---------------------------------------------------------------------------------------------------------------------
 module "example-elb-log-bucket" {
-  source = "../../.."
+  source = "../.."
 
   elb_regions = ["us-east-1", "eu-west-1"]
 }
@@ -101,7 +101,7 @@ module "example-elb-log-bucket" {
 # Do not create the bucket
 # ---------------------------------------------------------------------------------------------------------------------
 module "example-no-bucket" {
-  source = "../../.."
+  source = "../.."
 
   module_enabled = false
 }
