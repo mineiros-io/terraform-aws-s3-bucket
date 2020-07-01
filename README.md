@@ -95,7 +95,8 @@ Most basic usage creating a random named secure AWS bucket.
 
 ```hcl
 module "bucket" {
-  source = "git@github.com:mineiros-io/terraform-aws-s3-bucket.git?ref=v0.2.1"
+  source  = "mineiros-io/s3-bucket/aws"
+  version = "~> 0.2.1"
 }
 ```
 
