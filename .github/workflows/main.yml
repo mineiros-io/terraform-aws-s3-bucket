@@ -1,0 +1,26 @@
+name: CI/CD Pipeline
+
+on: push
+
+env:
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    name: Static Analysis
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run pre-commit
+        run: make test/pre-commit
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    name: Unit Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Unit Tests
+        run: make test/unit-tests
