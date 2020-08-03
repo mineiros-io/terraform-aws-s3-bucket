@@ -154,11 +154,6 @@ See [variables.tf] and [examples/] for details and use-cases.
   Sets the accelerate configuration of an existing bucket. Can be `Enabled` or `Suspended`.
   Default is `null`.
 
-- **`region`**: *(Optional `string`)*
-
-  If specified, the AWS region this bucket should reside in.
-  Default is the region used by the callee.
-
 - **`request_payer`**: *(Optional `string`)*
 
   Specifies who should bear the cost of Amazon S3 data transfer. Can be either `BucketOwner` or `Requester`.
@@ -289,7 +284,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Specify a list of Cloudfront OAIs to grant read-only access to.
   If in addition a new origin access identity is created via the `create_origin_access_identity`
-  attribute, all identities will be granted access. 
+  attribute, all identities will be granted access.
   **Attention:** Objects shared that way need
   to be owned by the account the bucket belongs to and can not be owned by other accounts
   (e.g. when uploaded through cross-account-access).

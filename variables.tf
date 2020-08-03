@@ -8,12 +8,6 @@
 # These variables have defaults, but may be overridden.
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "region" {
-  description = "If specified, the AWS region this bucket should reside in. (default: region of the callee)."
-  type        = string
-  default     = null
-}
-
 variable "bucket" {
   description = "The name of the bucket. (forces new resource, default: unique random name)"
   type        = string
