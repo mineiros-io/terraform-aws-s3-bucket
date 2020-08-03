@@ -5,13 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.2] - 2020-07-23
 ### Added
 - Add Changelog.md.
 ### Changed
 - Migrate CI from SemaphoreCI to GitHub Actions.
 - Migrate to [golangci-lint](https://github.com/golangci/golangci-lint) instead
   of native go tools for pre-commit hooks.
-
+  
 ## [0.2.1] - 2020-06-13
 ### Added
 - Work around a terraform issue in `module_depends_on` argument.
@@ -69,7 +71,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for Versioning, Bucket Logging, Lifecycle Rules, Request Payer,
   Cross-Origin Resource Sharing (CORS), Acceleration Status, Bucket Policy and Tags.
 
-[Unreleased]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.1...HEAD
+<!-- markdown-link-check-disable -->
+[Unreleased]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.1...v0.2.2
+<!-- markdown-link-check-enable -->
+
 [0.2.1]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.1.3...v0.1.4
