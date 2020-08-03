@@ -4,7 +4,8 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = var.aws_region
+  version = "~> 3.0"
+  region  = var.aws_region
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -14,7 +15,6 @@ provider "aws" {
 module "example-app-bucket" {
   source = "../.."
 
-  region     = var.aws_region
   versioning = true
 
   logging = {
@@ -51,8 +51,7 @@ module "example-app-bucket" {
 module "example-log-bucket" {
   source = "../.."
 
-  region = var.aws_region
-  acl    = "log-delivery-write"
+  acl = "log-delivery-write"
 
   # this is just for running the example even if logs already exist
   # this should not be set in production as all objects will be unrecoverably destroyed
