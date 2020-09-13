@@ -99,7 +99,7 @@ Most basic usage creating a random named secure AWS bucket.
 ```hcl
 module "bucket" {
   source  = "mineiros-io/s3-bucket/aws"
-  version = "~> 0.3.0"
+  version = "~> 0.4.0"
 }
 ```
 

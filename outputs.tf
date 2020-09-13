@@ -61,6 +61,7 @@ output "access_point" {
 # ------------------------------------------------------------------------------
 # OUTPUT MODULE CONFIGURATION
 # ------------------------------------------------------------------------------
+
 output "module_enabled" {
   description = "Whether the module is enabled"
   value       = var.module_enabled
