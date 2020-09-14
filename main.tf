@@ -28,13 +28,17 @@ locals {
 # Create the S3 Bucket
 # ---------------------------------------------------------------------------------------------------------------------
 
+locals {
+  tags = length(var.tags) > 0 ? var.tags : null
+}
+
 resource "aws_s3_bucket" "bucket" {
   count = var.module_enabled ? 1 : 0
 
   bucket              = var.bucket
   bucket_prefix       = var.bucket_prefix
   acl                 = var.acl
-  tags                = var.tags
+  tags                = local.tags
   force_destroy       = var.force_destroy
   acceleration_status = var.acceleration_status
   request_payer       = var.request_payer
@@ -192,7 +196,9 @@ resource "aws_s3_bucket_policy" "bucket" {
   count = local.policy_enabled ? 1 : 0
 
   bucket = local.bucket_id
-  policy = join("", data.aws_iam_policy_document.bucket.*.json)
+
+  # remove whitespaces by decoding and encoding again to suppress terrform output whitespace cahnges
+  policy = try(jsonencode(jsondecode(data.aws_iam_policy_document.bucket[0].json)), null)
 
   depends_on = [
     var.module_depends_on,
@@ -286,7 +292,7 @@ data "aws_iam_policy_document" "bucket" {
 
       principals {
         type        = "AWS"
-        identifiers = local.elb_accounts
+        identifiers = sort(local.elb_accounts)
       }
     }
   }
