@@ -29,7 +29,8 @@ locals {
 # ---------------------------------------------------------------------------------------------------------------------
 
 locals {
-  tags = length(var.tags) > 0 ? var.tags : null
+  tags        = merge(var.module_tags, var.tags)
+  bucket_tags = length(local.tags) > 0 ? local.tags : null
 }
 
 resource "aws_s3_bucket" "bucket" {
@@ -38,7 +39,7 @@ resource "aws_s3_bucket" "bucket" {
   bucket              = var.bucket
   bucket_prefix       = var.bucket_prefix
   acl                 = var.acl
-  tags                = local.tags
+  tags                = local.bucket_tags
   force_destroy       = var.force_destroy
   acceleration_status = var.acceleration_status
   request_payer       = var.request_payer

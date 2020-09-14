@@ -118,6 +118,12 @@ See [variables.tf] and [examples/] for details and use-cases.
   Specifies whether resources in the module will be created.
   Default is `true`.
 
+- **`module_tags`**: *(Optional `map(string)`)*
+
+  A map of tags that will be applied to all created resources that accept tags. Tags defined with 'module_tags' can be
+  overwritten by resource-specific tags.
+  Default is `{}`.
+
 - **`module_depends_on`**: *(Optional `list(any)`)*
 
   A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.

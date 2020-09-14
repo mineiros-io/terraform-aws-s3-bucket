@@ -44,6 +44,7 @@ locals {
   o_bucket_policy = try(merge(aws_s3_bucket_policy.bucket[0], {
     policy = jsonencode(jsondecode(local.o_bucket_policy_policy))
   }), null)
+  # o_bucket_policy = try(aws_s3_bucket_policy.bucket[0], null)
 
   # fix tf13 / aws3 output change detection issues (no github issue)
   # bucket always detects change in tags out put from null => {}

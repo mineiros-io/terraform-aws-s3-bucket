@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0]
 ### Changed
-- Add support for Terraform 0.13.x
+- Add support for Terraform 0.13.x.
+- Add support for `module_tags`.
 
 ## [0.3.0] - 2020-08-03
 ### Changed

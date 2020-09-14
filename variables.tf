@@ -256,10 +256,17 @@ variable "access_points" {
 # These variables are used to configure the module.
 # See https://medium.com/mineiros/the-ultimate-guide-on-how-to-write-terraform-modules-part-1-81f86d31f024
 # ------------------------------------------------------------------------------
+
 variable "module_enabled" {
   type        = bool
   description = "(optional) Whether to create resources within the module or not. Default is true."
   default     = true
+}
+
+variable "module_tags" {
+  type        = map(string)
+  description = "(Optional) A map of tags that will be applied to all created resources that accept tags. Tags defined with 'module_tags' can be overwritten by resource-specific tags."
+  default     = {}
 }
 
 variable "module_depends_on" {
