@@ -2,13 +2,16 @@
 
 [![Build Status][badge-build]][build-status]
 [![GitHub tag (latest SemVer)][badge-semver]][releases-github]
-[![license][badge-license]][apache20]
 [![Terraform Version][badge-terraform]][releases-terraform]
+[![AWS Provider Version][badge-tf-aws]][releases-aws-provider]
 [![Join Slack][badge-slack]][slack]
 
 # terraform-aws-s3-bucket
 
-A [Terraform] 0.12 base module for creating a secure [AWS S3-Bucket][AWS Se-Bucket].
+A [Terraform] base module for creating a secure [AWS S3-Bucket].
+
+***This module supports Terraform v0.13 as well as v0.12.20 and above
+and is compatible with the terraform AWS provider v3 as well as v2.0 and above.***
 
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
@@ -96,7 +99,7 @@ Most basic usage creating a random named secure AWS bucket.
 ```hcl
 module "bucket" {
   source  = "mineiros-io/s3-bucket/aws"
-  version = "~> 0.3.0"
+  version = "~> 0.4.0"
 }
 ```
 
@@ -114,6 +117,12 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Specifies whether resources in the module will be created.
   Default is `true`.
+
+- **`module_tags`**: *(Optional `map(string)`)*
+
+  A map of tags that will be applied to all created resources that accept tags. Tags defined with 'module_tags' can be
+  overwritten by resource-specific tags.
+  Default is `{}`.
 
 - **`module_depends_on`**: *(Optional `list(any)`)*
 
@@ -583,6 +592,8 @@ Run `make help` to see details on each available target.
 
 ## License
 
+[![license][badge-license]][apache20]
+
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE] for full details.
 
@@ -598,6 +609,9 @@ Copyright &copy; 2020 [Mineiros GmbH][homepage]
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
 [badge-terraform]: https://img.shields.io/badge/terraform-0.13%20and%200.12.20+-623CE4.svg?logo=terraform
 [badge-slack]: https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack
+
+[badge-tf-aws]: https://img.shields.io/badge/AWS-3%20and%202.0+-F8991D.svg?logo=terraform
+[releases-aws-provider]: https://github.com/terraform-providers/terraform-provider-aws/releases
 
 [build-status]: https://github.com/mineiros-io/terraform-aws-s3-bucket/actions
 [releases-github]: https://github.com/mineiros-io/terraform-aws-s3-bucket/releases
