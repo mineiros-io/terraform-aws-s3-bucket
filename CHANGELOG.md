@@ -6,14 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1]
+### Added
+- Prepare support for Terraform v0.14.x
+
 ## [0.4.0]
-### Changed
-- Add support for Terraform 0.13.x.
+### Added
+- Add support for Terraform v0.13.x
 - Add support for `module_tags`.
 
 ## [0.3.0] - 2020-08-03
 ### Changed
-- Add support for 3.x terraform AWS provider
+- Add support for Terraform AWS Provider v3.x
 
 ### Removed
 - Remove deprecated `region` argument (BREAKING CHANGE)
@@ -84,9 +88,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Cross-Origin Resource Sharing (CORS), Acceleration Status, Bucket Policy and Tags.
 
 <!-- markdown-link-check-disable -->
-[Unreleased]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.4.0...HEAD
-[0.4.0]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.3.0...v0.4.0
+[Unreleased]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.4.0...v0.4.1
 <!-- markdown-link-check-enable -->
+[0.4.0]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.0...v0.2.1
