@@ -6,6 +6,8 @@ repos:
       - id: terraform-validate
         exclude: ^examples|.terraform/
       - id: tflint
+      - id: gofmt
+      - id: goimports
       - id: golangci-lint
       - id: phony-targets
       - id: markdown-link-check
