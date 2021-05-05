@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2]
+### Added
+- feat: feat: add support for Terraform `v0.14.x`
+
+### Changed
+- feat: upgrade terratest to `v1.34.0`
+- build: update secrets in GitHub Actions pipeline
+- build: upgrade build-tools to `v0.9.0`
+- build: upgrade pre-commit-hooks to `v0.2.2`
+
 ## [0.4.1]
 ### Added
 - Prepare support for Terraform v0.14.x
@@ -89,8 +99,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- markdown-link-check-disable -->
 [Unreleased]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.4.1...HEAD
-[0.4.1]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.4.0...v0.4.1
+[0.4.2]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.4.1...v0.4.2
 <!-- markdown-link-check-enable -->
+[0.4.1]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.2.1...v0.2.2
