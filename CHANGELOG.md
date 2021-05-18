@@ -12,15 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - feat: feat: add support for Terraform `v0.15`
+- build: upgrade build-tools to `v0.11.0`
+- build: upgrade pre-commit-hooks to `v0.2.3`
+- feat: feat: add support for Terraform `v0.15`
 
 ### Fixed
 
 - fix: remove ssh forwarding in Makefile
-
-### Changed
-
-- build: upgrade build-tools to `v0.11.0`
-- build: upgrade pre-commit-hooks to `v0.2.3`
 
 ## [0.4.2]
 
