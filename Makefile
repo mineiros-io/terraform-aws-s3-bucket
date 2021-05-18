@@ -38,9 +38,6 @@ DOCKER_RUN_FLAGS += -v ${PWD}:/build
 DOCKER_RUN_FLAGS += --rm
 DOCKER_RUN_FLAGS += -e TF_IN_AUTOMATION
 
-DOCKER_SSH_FLAGS += -e SSH_AUTH_SOCK=/ssh-agent
-DOCKER_SSH_FLAGS += -v ${SSH_AUTH_SOCK}:/ssh-agent
-
 DOCKER_AWS_FLAGS += -e AWS_ACCESS_KEY_ID
 DOCKER_AWS_FLAGS += -e AWS_SECRET_ACCESS_KEY
 DOCKER_AWS_FLAGS += -e AWS_SESSION_TOKEN
@@ -59,13 +56,11 @@ template/adjust:
 
 ## Run pre-commit hooks inside a build-tools docker container.
 .PHONY: test/pre-commit
-test/pre-commit: DOCKER_FLAGS += ${DOCKER_SSH_FLAGS}
 test/pre-commit:
 	$(call docker-run,pre-commit run -a)
 
 ## Run all Go tests inside a build-tools docker container. This is complementary to running 'go test ./test/...'.
 .PHONY: test/unit-tests
-test/unit-tests: DOCKER_FLAGS += ${DOCKER_SSH_FLAGS}
 test/unit-tests: DOCKER_FLAGS += ${DOCKER_AWS_FLAGS}
 test/unit-tests: TEST ?= "TestUnit"
 test/unit-tests:
