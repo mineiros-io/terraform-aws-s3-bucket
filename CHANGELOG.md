@@ -11,46 +11,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- feat: feat: add support for Terraform `v0.15`
-- build: upgrade build-tools to `v0.11.0`
-- build: upgrade pre-commit-hooks to `v0.2.3`
-- feat: feat: add support for Terraform `v0.15`
-
-### Fixed
-
-- fix: remove ssh forwarding in Makefile
+- Add support for Terraform `v0.15`
 
 ## [0.4.2]
 
 ### Added
 
-- feat: feat: add support for Terraform `v0.14.x`
-
-### Changed
-
-- feat: upgrade terratest to `v1.34.0`
-- build: update secrets in GitHub Actions pipeline
-- build: upgrade build-tools to `v0.9.0`
-- build: upgrade pre-commit-hooks to `v0.2.2`
+- Add support for Terraform `v0.14.x`
 
 ## [0.4.1]
 
 ### Added
 
-- Prepare support for Terraform v0.14.x
+- Prepare support for Terraform `v0.14.x`
 
 ## [0.4.0]
 
 ### Added
 
-- Add support for Terraform v0.13.x
+- Add support for Terraform `v0.13.x`
 - Add support for `module_tags`.
 
 ## [0.3.0] - 2020-08-03
 
 ### Changed
 
-- Add support for Terraform AWS Provider v3.x
+- Add support for Terraform AWS Provider `v3.x`
 
 ### Removed
 
@@ -85,7 +71,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Upgrade documentation.
-- Update build-system.
 
 ## [0.1.4] - 2020-04-14
 
@@ -126,9 +111,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update minimum Terraform version to 0.12.20,
-  so we can take advantage of `try` and `can`.
-- Update README.md with and align it with our new format.
+- Update minimum Terraform version to `v0.12.20` so we can take advantage of `try()` and `can()`
+- Update README.md with and align it with our new format
 
 ## [0.0.2] - 2020-01-20
 
@@ -151,7 +135,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- markdown-link-check-disable -->
 
-[Unreleased]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.5.0...HEAD
+[unreleased]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.5.0...HEAD
 [0.5.0]: https://github.com/mineiros-io/terraform-aws-s3-bucket/compare/v0.4.2...v0.5.0
 
 <!-- markdown-link-check-enable -->
