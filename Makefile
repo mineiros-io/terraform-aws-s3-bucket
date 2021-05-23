@@ -1,7 +1,7 @@
 # Set default shell to bash
 SHELL := /bin/bash -o pipefail
 
-BUILD_TOOLS_VERSION      ?= v0.9.0
+BUILD_TOOLS_VERSION      ?= v0.11.0
 BUILD_TOOLS_DOCKER_REPO  ?= mineiros/build-tools
 BUILD_TOOLS_DOCKER_IMAGE ?= ${BUILD_TOOLS_DOCKER_REPO}:${BUILD_TOOLS_VERSION}
 
@@ -28,12 +28,15 @@ ifndef NOCOLOR
 	RESET  := $(shell tput -Txterm sgr0)
 endif
 
-DOCKER_RUN_FLAGS += --rm
+# We are creating docker volumes for /go and /terraform that are unique per
+# repository to reuse dependencies between different docker run commands.
+VOLUME_PREFIX ?= mineiros_build_tools
+VOLUME_SUFFIX ?= $(notdir $(shell git rev-parse --show-toplevel || "build"))
+DOCKER_RUN_FLAGS += -v ${VOLUME_PREFIX}-terraform-${VOLUME_SUFFIX}:/terraform
+DOCKER_RUN_FLAGS += -v ${VOLUME_PREFIX}-go-${VOLUME_SUFFIX}:/go
 DOCKER_RUN_FLAGS += -v ${PWD}:/build
+DOCKER_RUN_FLAGS += --rm
 DOCKER_RUN_FLAGS += -e TF_IN_AUTOMATION
-
-DOCKER_SSH_FLAGS += -e SSH_AUTH_SOCK=/ssh-agent
-DOCKER_SSH_FLAGS += -v ${SSH_AUTH_SOCK}:/ssh-agent
 
 DOCKER_AWS_FLAGS += -e AWS_ACCESS_KEY_ID
 DOCKER_AWS_FLAGS += -e AWS_SECRET_ACCESS_KEY
@@ -53,13 +56,11 @@ template/adjust:
 
 ## Run pre-commit hooks inside a build-tools docker container.
 .PHONY: test/pre-commit
-test/pre-commit: DOCKER_FLAGS += ${DOCKER_SSH_FLAGS}
 test/pre-commit:
 	$(call docker-run,pre-commit run -a)
 
 ## Run all Go tests inside a build-tools docker container. This is complementary to running 'go test ./test/...'.
 .PHONY: test/unit-tests
-test/unit-tests: DOCKER_FLAGS += ${DOCKER_SSH_FLAGS}
 test/unit-tests: DOCKER_FLAGS += ${DOCKER_AWS_FLAGS}
 test/unit-tests: TEST ?= "TestUnit"
 test/unit-tests:
