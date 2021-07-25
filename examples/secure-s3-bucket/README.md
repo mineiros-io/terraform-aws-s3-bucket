@@ -20,7 +20,7 @@ The code in [main.tf] defines...
 ```hcl
 module "example-app-bucket" {
   source  = "mineiros-io/s3-bucket/aws"
-  version = "~> 0.5.0"
+  version = "~> 0.6.0"
 
   bucket_prefix = "app"
 
@@ -40,7 +40,7 @@ module "example-app-bucket" {
 
 module "example-log-bucket" {
   source  = "mineiros-io/s3-bucket/aws"
-  version = "~> 0.5.0"
+  version = "~> 0.6.0"
 
   bucket_prefix = "log"
 
