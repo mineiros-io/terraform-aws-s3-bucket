@@ -9,14 +9,14 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 locals {
-  cors_enabled    = length(keys(var.cors_rule)) > 0
-  logging_enabled = length(keys(var.logging)) > 0
-  sse_enabled     = length(keys(var.apply_server_side_encryption_by_default)) > 0
+  cors_enabled        = length(keys(var.cors_rule)) > 0
+  logging_enabled     = length(keys(var.logging)) > 0
+  sse_enabled         = length(keys(var.apply_server_side_encryption_by_default)) > 0
   replication_enabled = length(keys(var.replication)) > 0
 
-  cors       = local.cors_enabled ? [var.cors_rule] : []
-  logging    = local.logging_enabled ? [var.logging] : []
-  encryption = local.sse_enabled ? [var.apply_server_side_encryption_by_default] : []
+  cors        = local.cors_enabled ? [var.cors_rule] : []
+  logging     = local.logging_enabled ? [var.logging] : []
+  encryption  = local.sse_enabled ? [var.apply_server_side_encryption_by_default] : []
   replication = local.replication_enabled ? [var.replication] : []
 
   versioning = try(
