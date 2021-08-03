@@ -12,10 +12,12 @@ locals {
   cors_enabled    = length(keys(var.cors_rule)) > 0
   logging_enabled = length(keys(var.logging)) > 0
   sse_enabled     = length(keys(var.apply_server_side_encryption_by_default)) > 0
+  replication_enabled = length(keys(var.replication)) > 0
 
   cors       = local.cors_enabled ? [var.cors_rule] : []
   logging    = local.logging_enabled ? [var.logging] : []
   encryption = local.sse_enabled ? [var.apply_server_side_encryption_by_default] : []
+  replication = local.replication_enabled ? [var.replication] : []
 
   versioning = try(
     [{ enabled = tobool(var.versioning) }],
@@ -137,6 +139,30 @@ resource "aws_s3_bucket" "bucket" {
         content {
           days          = lookup(transition.value, "days", null)
           storage_class = transition.value.storage_class
+        }
+      }
+    }
+  }
+
+  dynamic "replication_configuration" {
+    for_each = local.replication
+    iterator = replication
+
+    content {
+      role = join("", aws_iam_role.replication.*.arn)
+
+      rules {
+        id     = "bucket_replication"
+        status = "Enabled"
+
+        destination {
+          bucket        = "arn:aws:s3:::${replication.value.bucket}"
+          storage_class = replication.value.storage_class
+          account_id    = replication.value.account_id
+
+          access_control_translation {
+            owner = "Destination"
+          }
         }
       }
     }
@@ -360,4 +386,77 @@ resource "aws_s3_access_point" "ap" {
   }
 
   depends_on = [var.module_depends_on]
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Replication Role and policy
+# ---------------------------------------------------------------------------------------------------------------------
+resource "aws_iam_role" "replication" {
+  count = local.replication_enabled ? 1 : 0
+  name  = "${var.bucket}-replication-role"
+
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Action" : "sts:AssumeRole",
+          "Principal" : {
+            "Service" : "s3.amazonaws.com"
+          },
+          "Effect" : "Allow",
+          "Sid" : ""
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_policy" "replication" {
+  count = local.replication_enabled ? 1 : 0
+  name  = "${var.bucket}-replication-policy"
+
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Action" : [
+            "s3:GetReplicationConfiguration",
+            "s3:ListBucket",
+            "s3:GetObjectVersion",
+            "s3:GetObjectVersionAcl",
+            "s3:ReplicateObject",
+            "s3:ReplicateDelete"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "${local.bucket_arn}",
+            "${local.bucket_arn}/*"
+          ]
+        },
+        {
+          "Action" : [
+            "s3:GetBucketVersioning",
+            "s3:PutBucketVersioning",
+            "s3:ReplicateObject",
+            "s3:ReplicateDelete",
+            "s3:ObjectOwnerOverrideToBucketOwner"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:s3:::${var.replication.bucket}/*",
+            "arn:aws:s3:::${var.replication.bucket}/"
+          ]
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_policy_attachment" "replication" {
+  count      = local.replication_enabled ? 1 : 0
+  name       = "${var.bucket}-replication-attachment"
+  roles      = aws_iam_role.replication.*.name
+  policy_arn = join("", aws_iam_policy.replication.*.arn)
 }

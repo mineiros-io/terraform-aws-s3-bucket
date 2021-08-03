@@ -251,6 +251,20 @@ variable "access_points" {
   default     = []
 }
 
+variable "replication" {
+  type        = map(string)
+  description = "A list of replication configurations."
+  default     = {}
+
+  # Example:
+  # 
+  # replication = {
+  #   bucket = "replication_bucket_name"
+  #   storage_class      = "STANDARD"
+  #   account_id         = "112233445566"
+  # }
+}
+
 # ------------------------------------------------------------------------------
 # OPTIONAL MODULE CONFIGURATION PARAMETERS
 # These variables are used to configure the module.
