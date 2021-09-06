@@ -1,7 +1,7 @@
 # Set default shell to bash
 SHELL := /bin/bash -o pipefail
 
-BUILD_TOOLS_VERSION      ?= v0.12.0
+BUILD_TOOLS_VERSION      ?= v0.13.0
 BUILD_TOOLS_DOCKER_REPO  ?= mineiros/build-tools
 BUILD_TOOLS_DOCKER_IMAGE ?= ${BUILD_TOOLS_DOCKER_REPO}:${BUILD_TOOLS_VERSION}
 
@@ -36,6 +36,10 @@ GIT_TOPLEVEl = $(shell git rev-parse --show-toplevel)
 DOCKER_RUN_FLAGS += -v ${GIT_TOPLEVEl}:/build
 DOCKER_RUN_FLAGS += --rm
 DOCKER_RUN_FLAGS += -e TF_IN_AUTOMATION
+# If TF_VERSION is defined, TFSwitch will switch to the desired version on
+# container startup. If TF_VERSION is omitted, the default version installed
+# inside the docker image will be used.
+DOCKER_RUN_FLAGS += -e TF_VERSION
 
 # If SSH_AUTH_SOCK is set, we forward the SSH agent of the host system into
 # the docker container. This is useful when working with private repositories
