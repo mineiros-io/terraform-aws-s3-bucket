@@ -168,12 +168,6 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
-  lifecycle {
-    ignore_changes = [
-      replication_configuration,
-    ]
-  }
-
   depends_on = [var.module_depends_on]
 }
 
