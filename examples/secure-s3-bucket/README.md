@@ -84,8 +84,8 @@ module "example-log-bucket" {
 
 ### Cloning the repository
 ```
-git clone https://github.com/mineiros-io/terraform-module-template.git
-cd terraform-module-template/examples/example
+git clone https://github.com/mineiros-io/terraform-aws-s3-bucket.git
+cd terraform-aws-s3-bucket/examples/example
 ```
 
 ### Initializing Terraform
