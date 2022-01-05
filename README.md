@@ -17,14 +17,13 @@ and is compatible with the terraform AWS provider v3 as well as v2.0 and above.*
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
 - [Module Argument Reference](#module-argument-reference)
-  - [Top-level Arguments](#top-level-arguments)
-    - [Module Configuration](#module-configuration)
-      - [Bucket Configuration](#bucket-configuration)
-      - [S3 Access Points](#s3-access-points)
-      - [S3 bucket-level Public Access Block Configuration](#s3-bucket-level-public-access-block-configuration)
-      - [Cross Account Access Configuration](#cross-account-access-configuration)
-      - [Cloudfront Origin Access Identity Access](#cloudfront-origin-access-identity-access)
-      - [ELB Log Delivery](#elb-log-delivery)
+  - [Module Configuration](#module-configuration)
+    - [Bucket Configuration](#bucket-configuration)
+    - [S3 Access Points](#s3-access-points)
+    - [S3 bucket-level Public Access Block Configuration](#s3-bucket-level-public-access-block-configuration)
+    - [Cross Account Access Configuration](#cross-account-access-configuration)
+    - [Cloudfront Origin Access Identity Access](#cloudfront-origin-access-identity-access)
+    - [ELB Log Delivery](#elb-log-delivery)
 - [Module Outputs](#module-outputs)
 - [External Documentation](#external-documentation)
   - [AWS Documentation S3](#aws-documentation-s3)
@@ -102,9 +101,7 @@ Advanced usage as found in [examples/secure-s3-bucket/main.tf] setting all requi
 
 See [variables.tf] and [examples/] for details and use-cases.
 
-### Top-level Arguments
-
-#### Module Configuration
+### Module Configuration
 
 - [**`module_enabled`**](#var-module_enabled): *(Optional `bool`)*<a name="var-module_enabled"></a>
 
@@ -123,7 +120,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
 
-##### Bucket Configuration
+#### Bucket Configuration
 
 - [**`bucket`**](#var-bucket): *(Optional `string`)*<a name="var-bucket"></a>
 
@@ -347,7 +344,7 @@ See [variables.tf] and [examples/] for details and use-cases.
       Specifies the Amazon S3 storage class to which you want the noncurrent versions object to transition.
       Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
 
-##### S3 Access Points
+#### S3 Access Points
 
 - [**`access_points`**](#var-access_points): *(Optional `list(access_point)`)*<a name="var-access_points"></a>
 
@@ -420,7 +417,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
     Default is `true`.
 
-##### S3 bucket-level Public Access Block Configuration
+#### S3 bucket-level Public Access Block Configuration
 
 - [**`block_public_acls`**](#var-block_public_acls): *(Optional `bool`)*<a name="var-block_public_acls"></a>
 
@@ -462,7 +459,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `true`.
 
-##### Cross Account Access Configuration
+#### Cross Account Access Configuration
 
 - [**`cross_account_identifiers`**](#var-cross_account_identifiers): *(Optional `list(string)`)*<a name="var-cross_account_identifiers"></a>
 
@@ -496,7 +493,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `["bucket-owner-full-control"]`.
 
-##### Cloudfront Origin Access Identity Access
+#### Cloudfront Origin Access Identity Access
 
 - [**`create_origin_access_identity`**](#var-create_origin_access_identity): *(Optional `bool`)*<a name="var-create_origin_access_identity"></a>
 
@@ -523,7 +520,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `[]`.
 
-##### ELB Log Delivery
+#### ELB Log Delivery
 
 - [**`elb_log_delivery`**](#var-elb_log_delivery): *(Optional `bool`)*<a name="var-elb_log_delivery"></a>
 
