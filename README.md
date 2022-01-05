@@ -17,13 +17,14 @@ and is compatible with the terraform AWS provider v3 as well as v2.0 and above.*
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
 - [Module Argument Reference](#module-argument-reference)
-  - [Module Configuration](#module-configuration)
-    - [Bucket Configuration](#bucket-configuration)
+  - [Bucket Configuration](#bucket-configuration)
+  - [Extended Resource Configuration](#extended-resource-configuration)
     - [S3 Access Points](#s3-access-points)
     - [S3 bucket-level Public Access Block Configuration](#s3-bucket-level-public-access-block-configuration)
     - [Cross Account Access Configuration](#cross-account-access-configuration)
     - [Cloudfront Origin Access Identity Access](#cloudfront-origin-access-identity-access)
     - [ELB Log Delivery](#elb-log-delivery)
+  - [Module Configuration](#module-configuration)
 - [Module Outputs](#module-outputs)
 - [External Documentation](#external-documentation)
   - [AWS Documentation S3](#aws-documentation-s3)
@@ -101,26 +102,7 @@ Advanced usage as found in [examples/secure-s3-bucket/main.tf] setting all requi
 
 See [variables.tf] and [examples/] for details and use-cases.
 
-### Module Configuration
-
-- [**`module_enabled`**](#var-module_enabled): *(Optional `bool`)*<a name="var-module_enabled"></a>
-
-  Specifies whether resources in the module will be created.
-
-  Default is `true`.
-
-- [**`module_tags`**](#var-module_tags): *(Optional `map(string)`)*<a name="var-module_tags"></a>
-
-  A map of tags that will be applied to all created resources that accept tags. Tags defined with 'module_tags' can be
-  overwritten by resource-specific tags.
-
-  Default is `{}`.
-
-- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(any)`)*<a name="var-module_depends_on"></a>
-
-  A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
-
-#### Bucket Configuration
+### Bucket Configuration
 
 - [**`bucket`**](#var-bucket): *(Optional `string`)*<a name="var-bucket"></a>
 
@@ -344,6 +326,8 @@ See [variables.tf] and [examples/] for details and use-cases.
       Specifies the Amazon S3 storage class to which you want the noncurrent versions object to transition.
       Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
 
+### Extended Resource Configuration
+
 #### S3 Access Points
 
 - [**`access_points`**](#var-access_points): *(Optional `list(access_point)`)*<a name="var-access_points"></a>
@@ -533,6 +517,25 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `[]`.
 
+### Module Configuration
+
+- [**`module_enabled`**](#var-module_enabled): *(Optional `bool`)*<a name="var-module_enabled"></a>
+
+  Specifies whether resources in the module will be created.
+
+  Default is `true`.
+
+- [**`module_tags`**](#var-module_tags): *(Optional `map(string)`)*<a name="var-module_tags"></a>
+
+  A map of tags that will be applied to all created resources that accept tags. Tags defined with 'module_tags' can be
+  overwritten by resource-specific tags.
+
+  Default is `{}`.
+
+- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(any)`)*<a name="var-module_depends_on"></a>
+
+  A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
+
 ## Module Outputs
 
 The following attributes are exported by the module:
@@ -542,24 +545,18 @@ The following attributes are exported by the module:
   - **`id`**: The name of the bucket.
   - **`arn`**: The ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.
   - **`bucket_domain_name`**: The bucket domain name. Will be of format `bucketname.s3.amazonaws.com`.
-  - **`bucket_regional_domain_name`**: The bucket region-specific domain name.
-    The bucket domain name including the region name, please refer here for format.
-    Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin,
-    it will prevent redirect issues from CloudFront to S3 Origin URL.
+  - **`bucket_regional_domain_name`**: The bucket region-specific domain name. The bucket domain name including the region name, please refer here for format. Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin, it will prevent redirect issues from CloudFront to S3 Origin URL.
   - **`hosted_zone_id`**: The Route 53 Hosted Zone ID for this bucket's region.
   - **`region`**: The AWS region this bucket resides in.
-- **`bucket_policy`**: All bucket policy object attributes as returned by the
-`s3_bucket_policy` resource.
-- **`origin_access_identity`**: All cloudfront origin access identity object attributes as returned by the
-`aws_cloudfront_origin_access_identity` resource.
-- **`access_point`**: A list of
-`aws_s3_access_point` objects keyed by the `name` attribute.
+- **`bucket_policy`**: All bucket policy object attributes as returned by the `s3_bucket_policy` resource.
+- **`origin_access_identity`**: All cloudfront origin access identity object attributes as returned by the `aws_cloudfront_origin_access_identity` resource.
+- **`access_point`**: A list of `aws_s3_access_point` objects keyed by the `name` attribute.
 
 ## External Documentation
 
 ### AWS Documentation S3
 
-- Access Points: https://docs.aws.amazon.com/AmazonS3/latest/dev/   access-points.html
+- Access Points: https://docs.aws.amazon.com/AmazonS3/latest/dev/access-points.html
 - Default Encryption: https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html
 - Optimizing Performance: https://docs.aws.amazon.com/AmazonS3/latest/dev/optimizing-performance.html
 - Requester Pays Bucket: https://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html
@@ -578,11 +575,11 @@ The following attributes are exported by the module:
 
 This Module follows the principles of [Semantic Versioning (SemVer)].
 
-Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following constructs:
+Given a version number `MAJOR.MINOR.PATCH`, we increment the:
 
-1. Use the `MAJOR` version for incompatible changes.
-2. Use the `MINOR` version when adding functionality in a backwards compatible manner.
-3. Use the `PATCH` version when introducing backwards compatible bug fixes.
+1. `MAJOR` version when we make incompatible changes,
+2. `MINOR` version when we add functionality in a backwards compatible manner, and
+3. `PATCH` version when we make backwards compatible bug fixes.
 
 ### Backwards compatibility in `0.0.z` and `0.y.z` version
 
@@ -591,14 +588,15 @@ Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following co
 
 ## About Mineiros
 
-Mineiros is a [DevOps as a Service][homepage] company based in Berlin, Germany.
-We offer commercial support for all of our projects and encourage you to reach out if you have any questions or need help.
-Feel free to send us an email at [hello@mineiros.io] or join our [Community Slack channel][slack].
+[Mineiros][homepage] is a remote-first company headquartered in Berlin, Germany
+that solves development, automation and security challenges in cloud infrastructure.
 
-We can also help you with:
+Our vision is to massively reduce time and overhead for teams to manage and
+deploy production-grade and secure cloud infrastructure.
 
-- Terraform modules for all types of infrastructure such as VPCs, Docker clusters, databases, logging and monitoring, CI, etc.
-- Consulting & training on AWS, Terraform and DevOps
+We offer commercial support for all of our modules and encourage you to reach out
+if you have any questions or need help. Feel free to email us at [hello@mineiros.io] or join our
+[Community Slack channel][slack].
 
 ## Reporting Issues
 

@@ -117,359 +117,335 @@ section {
     END
 
     section {
-      title = "Module Configuration"
+      title = "Bucket Configuration"
 
-      variable "module_enabled" {
-        type        = bool
-        default     = true
+      variable "bucket" {
+        type        = string
         description = <<-END
-          Specifies whether resources in the module will be created.
+          The name of the bucket. If omitted, Terraform will assign a random, unique name. Forces new resource.
         END
       }
 
-      variable "module_tags" {
+      variable "bucket_prefix" {
+        type        = string
+        description = <<-END
+          Creates a unique bucket name beginning with the specified prefix. Conflicts with `bucket`. Forces new resource.
+        END
+      }
+
+      variable "acl" {
+        type        = string
+        default     = "private"
+        description = <<-END
+          The canned ACL to apply.
+        END
+      }
+
+      variable "policy" {
+        type        = string
+        default     = null
+        description = <<-END
+          A valid bucket policy JSON document. Note that if the policy document is not specific enough (but still valid), Terraform may view the policy as constantly changing in a terraform plan. In this case, please make sure you use the verbose/specific version of the policy. For more information about building AWS IAM policy documents with Terraform, see the [AWS IAM Policy Document Guide].
+        END
+      }
+
+      variable "tags" {
         type        = map(string)
         default     = {}
         description = <<-END
-          A map of tags that will be applied to all created resources that accept tags. Tags defined with 'module_tags' can be
-          overwritten by resource-specific tags.
+          A mapping of tags to assign to the bucket.
         END
       }
 
-      variable "module_depends_on" {
-        type        = list(any)
+      variable "force_destroy" {
+        type        = bool
+        default     = false
         description = <<-END
-          A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
+          A boolean that indicates all objects (including any locked objects) should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable.
         END
       }
 
-      section {
-        title = "Bucket Configuration"
+      variable "acceleration_status" {
+        type        = string
+        description = <<-END
+          Sets the accelerate configuration of an existing bucket. Can be `Enabled` or `Suspended`.
+        END
+      }
 
-        variable "bucket" {
-          type        = string
-          description = <<-END
-            The name of the bucket. If omitted, Terraform will assign a random, unique name. Forces new resource.
-          END
-        }
+      variable "request_payer" {
+        type        = string
+        default     = "BucketOwner"
+        description = <<-END
+          Specifies who should bear the cost of Amazon S3 data transfer. Can be either `BucketOwner` or `Requester`.
+          By default, the owner of the S3 bucket would incur the costs of any data transfer.
+          See [Requester Pays Buckets developer guide] for more information.
+        END
+      }
 
-        variable "bucket_prefix" {
-          type        = string
-          description = <<-END
-            Creates a unique bucket name beginning with the specified prefix. Conflicts with `bucket`. Forces new resource.
-          END
-        }
+      variable "cors_rule" {
+        type        = object(cors)
+        default     = {}
+        description = <<-END
+          Specifying settings for Cross-Origin Resource Sharing (CORS) (documented below).
+        END
 
-        variable "acl" {
-          type        = string
-          default     = "private"
-          description = <<-END
-            The canned ACL to apply.
-          END
-        }
-
-        variable "policy" {
-          type        = string
-          default     = null
-          description = <<-END
-            A valid bucket policy JSON document. Note that if the policy document is not specific enough (but still valid), Terraform may view the policy as constantly changing in a terraform plan. In this case, please make sure you use the verbose/specific version of the policy. For more information about building AWS IAM policy documents with Terraform, see the [AWS IAM Policy Document Guide].
-          END
-        }
-
-        variable "tags" {
-          type        = map(string)
-          default     = {}
-          description = <<-END
-            A mapping of tags to assign to the bucket.
-          END
-        }
-
-        variable "force_destroy" {
-          type        = bool
-          default     = false
-          description = <<-END
-            A boolean that indicates all objects (including any locked objects) should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable.
-          END
-        }
-
-        variable "acceleration_status" {
-          type        = string
-          description = <<-END
-            Sets the accelerate configuration of an existing bucket. Can be `Enabled` or `Suspended`.
-          END
-        }
-
-        variable "request_payer" {
-          type        = string
-          default     = "BucketOwner"
-          description = <<-END
-            Specifies who should bear the cost of Amazon S3 data transfer. Can be either `BucketOwner` or `Requester`.
-            By default, the owner of the S3 bucket would incur the costs of any data transfer.
-            See [Requester Pays Buckets developer guide] for more information.
-          END
-        }
-
-        variable "cors_rule" {
-          type        = object(cors)
-          default     = {}
-          description = <<-END
-            Specifying settings for Cross-Origin Resource Sharing (CORS) (documented below).
-          END
-
-          attribute "allowed_headers" {
-            type        = list(string)
-            default     = []
-            description = <<-END
-              Specifies which headers are allowed.
-            END
-          }
-
-          attribute "allowed_methods" {
-            required    = true
-            type        = list(string)
-            description = <<-END
-              Specifies which methods are allowed. Can be `GET`, `PUT`, `POST`, `DELETE` or `HEAD`.
-            END
-          }
-
-          attribute "allowed_origins" {
-            required    = true
-            type        = list(string)
-            description = <<-END
-              Specifies which origins are allowed.
-            END
-          }
-
-          attribute "expose_headers" {
-            type        = list(string)
-            default     = []
-            description = <<-END
-              Specifies expose header in the response.
-            END
-          }
-
-          attribute "max_age_seconds" {
-            type        = number
-            description = <<-END
-              Specifies time in seconds that browser can cache the response for a preflight request.
-            END
-          }
-        }
-
-        variable "versioning" {
-          type        = bool
-          default     = false
-          description = <<-END
-            Can also be of type `object`. When set to `true` versioning will be enabled. Specifies Versioning Configuration when passed as an object (documented below).
-          END
-
-          attribute "enabled" {
-            type        = bool
-            description = <<-END
-              Once you version-enable a bucket, it can never return to an unversioned state.
-              You can, however, suspend versioning on that bucket.
-            END
-          }
-
-          attribute "mfa_delete" {
-            type        = bool
-            default     = false
-            description = <<-END
-              Enable MFA delete for either change: the versioning state of your bucket or
-              permanently delete an object version.
-            END
-          }
-        }
-
-        variable "logging" {
-          type        = map(string)
-          default     = {}
-          description = <<-END
-            Specifying a configuration for logging access logs (documented below).
-          END
-
-          attribute "target_bucket" {
-            required    = true
-            type        = string
-            description = <<-END
-              The name of the bucket that will receive the log objects.
-            END
-          }
-
-          attribute "target_prefix" {
-            type        = string
-            description = <<-END
-              To specify a key prefix for log objects.
-            END
-          }
-        }
-
-        variable "apply_server_side_encryption_by_default" {
-          type        = map(string)
-          description = <<-END
-            Specifying the server side encryption to apply to objects at rest (documented below).
-            Default is to use `AES256` encryption.
-          END
-
-          attribute "sse_algorithm" {
-            type        = string
-            default     = "aws:kms"
-            description = <<-END
-              The server-side encryption algorithm to use. Valid values are `AES256` and `aws:kms`. Default applies when `kms_master_key_id` is specified, else `AES256`
-            END
-          }
-
-          attribute "kms_master_key_id" {
-            type        = string
-            default     = "null"
-            description = <<-END
-              The AWS KMS master key ID used for the SSE-KMS encryption. The default `aws/s3` AWS KMS master key is used if this element is absent while the sse_algorithm is `aws:kms`.
-            END
-          }
-        }
-
-        variable "lifecycle_rules" {
-          type        = list(lifecycle_rule)
+        attribute "allowed_headers" {
+          type        = list(string)
           default     = []
           description = <<-END
-            Specifying various rules specifying object lifecycle management (documented below).
+            Specifies which headers are allowed.
+          END
+        }
+
+        attribute "allowed_methods" {
+          required    = true
+          type        = list(string)
+          description = <<-END
+            Specifies which methods are allowed. Can be `GET`, `PUT`, `POST`, `DELETE` or `HEAD`.
+          END
+        }
+
+        attribute "allowed_origins" {
+          required    = true
+          type        = list(string)
+          description = <<-END
+            Specifies which origins are allowed.
+          END
+        }
+
+        attribute "expose_headers" {
+          type        = list(string)
+          default     = []
+          description = <<-END
+            Specifies expose header in the response.
+          END
+        }
+
+        attribute "max_age_seconds" {
+          type        = number
+          description = <<-END
+            Specifies time in seconds that browser can cache the response for a preflight request.
+          END
+        }
+      }
+
+      variable "versioning" {
+        type        = bool
+        default     = false
+        description = <<-END
+          Can also be of type `object`. When set to `true` versioning will be enabled. Specifies Versioning Configuration when passed as an object (documented below).
+        END
+
+        attribute "enabled" {
+          type        = bool
+          description = <<-END
+            Once you version-enable a bucket, it can never return to an unversioned state.
+            You can, however, suspend versioning on that bucket.
+          END
+        }
+
+        attribute "mfa_delete" {
+          type        = bool
+          default     = false
+          description = <<-END
+            Enable MFA delete for either change: the versioning state of your bucket or
+            permanently delete an object version.
+          END
+        }
+      }
+
+      variable "logging" {
+        type        = map(string)
+        default     = {}
+        description = <<-END
+          Specifying a configuration for logging access logs (documented below).
+        END
+
+        attribute "target_bucket" {
+          required    = true
+          type        = string
+          description = <<-END
+            The name of the bucket that will receive the log objects.
+          END
+        }
+
+        attribute "target_prefix" {
+          type        = string
+          description = <<-END
+            To specify a key prefix for log objects.
+          END
+        }
+      }
+
+      variable "apply_server_side_encryption_by_default" {
+        type        = map(string)
+        description = <<-END
+          Specifying the server side encryption to apply to objects at rest (documented below).
+          Default is to use `AES256` encryption.
+        END
+
+        attribute "sse_algorithm" {
+          type        = string
+          default     = "aws:kms"
+          description = <<-END
+            The server-side encryption algorithm to use. Valid values are `AES256` and `aws:kms`. Default applies when `kms_master_key_id` is specified, else `AES256`
+          END
+        }
+
+        attribute "kms_master_key_id" {
+          type        = string
+          default     = "null"
+          description = <<-END
+            The AWS KMS master key ID used for the SSE-KMS encryption. The default `aws/s3` AWS KMS master key is used if this element is absent while the sse_algorithm is `aws:kms`.
+          END
+        }
+      }
+
+      variable "lifecycle_rules" {
+        type        = list(lifecycle_rule)
+        default     = []
+        description = <<-END
+          Specifying various rules specifying object lifecycle management (documented below).
+        END
+
+        attribute "id" {
+          type        = string
+          description = <<-END
+            Unique identifier for the rule.
+          END
+        }
+
+        attribute "prefix" {
+          type        = string
+          description = <<-END
+            Object key prefix identifying one or more objects to which the rule applies.
+          END
+        }
+
+        attribute "tags" {
+          type        = map(string)
+          description = <<-END
+            Specifies object tags key and value.
+          END
+        }
+
+        attribute "enabled" {
+          required    = true
+          type        = bool
+          description = <<-END
+            Specifies lifecycle rule status.
+          END
+        }
+
+        attribute "abort_incomplete_multipart_upload_days" {
+          type        = number
+          description = <<-END
+            Specifies the number of days after initiating a multipart upload when the multipart upload must be completed.
+          END
+        }
+
+        attribute "expiration" {
+          type        = object(expiration)
+          description = <<-END
+            Specifies a period in the object's expire (documented below).
           END
 
-          attribute "id" {
+          attribute "date" {
             type        = string
             description = <<-END
-              Unique identifier for the rule.
+              Specifies the date after which you want the corresponding action to take effect.
             END
           }
 
-          attribute "prefix" {
+          attribute "days" {
             type        = string
             description = <<-END
-              Object key prefix identifying one or more objects to which the rule applies.
+              Specifies the number of days after object creation when the specific rule action takes effect.
             END
           }
 
-          attribute "tags" {
-            type        = map(string)
-            description = <<-END
-              Specifies object tags key and value.
-            END
-          }
-
-          attribute "enabled" {
-            required    = true
+          attribute "expired_object_delete_marker" {
             type        = bool
             description = <<-END
-              Specifies lifecycle rule status.
+              On a versioned bucket (versioning-enabled or versioning-suspended bucket), you can add this element in the lifecycle configuration to direct Amazon S3 to delete expired object delete markers.
+            END
+          }
+        }
+
+        attribute "transition" {
+          type        = object(transition)
+          description = <<-END
+            Specifies a period in the object's transitions (documented below).
+          END
+
+          attribute "date" {
+            type        = string
+            description = <<-END
+              Specifies the date after which you want the corresponding action to take effect.
             END
           }
 
-          attribute "abort_incomplete_multipart_upload_days" {
+          attribute "days" {
             type        = number
             description = <<-END
-              Specifies the number of days after initiating a multipart upload when the multipart upload must be completed.
+              Specifies the number of days after object creation when the specific rule action takes effect.
             END
           }
 
-          attribute "expiration" {
-            type        = object(expiration)
+          attribute "storage_class" {
+            required    = true
+            type        = string
             description = <<-END
-              Specifies a period in the object's expire (documented below).
+              Specifies the Amazon S3 storage class to which you want the object to transition.
+              Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
             END
+          }
+        }
 
-            attribute "date" {
-              type        = string
-              description = <<-END
-                Specifies the date after which you want the corresponding action to take effect.
-              END
-            }
+        attribute "noncurrent_version_expiration" {
+          type        = object(noncurrent_version_expiration)
+          description = <<-END
+            Specifies when noncurrent object versions expire (documented below).
+          END
 
-            attribute "days" {
-              type        = string
-              description = <<-END
-                Specifies the number of days after object creation when the specific rule action takes effect.
-              END
-            }
+          attribute "days" {
+            required    = true
+            type        = number
+            description = <<-END
+              Specifies the number of days an object's noncurrent object versions expire.
+            END
+          }
+        }
 
-            attribute "expired_object_delete_marker" {
-              type        = bool
-              description = <<-END
-                On a versioned bucket (versioning-enabled or versioning-suspended bucket), you can add this element in the lifecycle configuration to direct Amazon S3 to delete expired object delete markers.
-              END
-            }
+        attribute "noncurrent_version_transition" {
+          type        = object(noncurrent_version_transition)
+          description = <<-END
+            Specifies when noncurrent object versions transitions (documented below).
+            At least one of `expiration`, `transition`, `noncurrent_version_expiration`, `noncurrent_version_transition` must be specified.
+          END
+
+          attribute "days" {
+            required    = true
+            type        = number
+            description = <<-END
+              Specifies the number of days an object's noncurrent object versions expire.
+            END
           }
 
-          attribute "transition" {
-            type        = object(transition)
+          attribute "storage_class" {
+            required    = true
+            type        = string
             description = <<-END
-              Specifies a period in the object's transitions (documented below).
+              Specifies the Amazon S3 storage class to which you want the noncurrent versions object to transition.
+              Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
             END
-
-            attribute "date" {
-              type        = string
-              description = <<-END
-                Specifies the date after which you want the corresponding action to take effect.
-              END
-            }
-
-            attribute "days" {
-              type        = number
-              description = <<-END
-                Specifies the number of days after object creation when the specific rule action takes effect.
-              END
-            }
-
-            attribute "storage_class" {
-              required    = true
-              type        = string
-              description = <<-END
-                Specifies the Amazon S3 storage class to which you want the object to transition.
-                Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
-              END
-            }
-          }
-
-          attribute "noncurrent_version_expiration" {
-            type        = object(noncurrent_version_expiration)
-            description = <<-END
-              Specifies when noncurrent object versions expire (documented below).
-            END
-
-            attribute "days" {
-              required    = true
-              type        = number
-              description = <<-END
-                Specifies the number of days an object's noncurrent object versions expire.
-              END
-            }
-          }
-
-          attribute "noncurrent_version_transition" {
-            type        = object(noncurrent_version_transition)
-            description = <<-END
-              Specifies when noncurrent object versions transitions (documented below).
-              At least one of `expiration`, `transition`, `noncurrent_version_expiration`, `noncurrent_version_transition` must be specified.
-            END
-
-            attribute "days" {
-              required    = true
-              type        = number
-              description = <<-END
-                Specifies the number of days an object's noncurrent object versions expire.
-              END
-            }
-
-            attribute "storage_class" {
-              required    = true
-              type        = string
-              description = <<-END
-                Specifies the Amazon S3 storage class to which you want the noncurrent versions object to transition.
-                Can be `ONEZONE_IA`, `STANDARD_IA`, `INTELLIGENT_TIERING`, `GLACIER`, or `DEEP_ARCHIVE`.
-              END
-            }
           }
         }
       }
+    }
+
+    section {
+      title = "Extended Resource Configuration"
 
       section {
         title = "S3 Access Points"
@@ -718,7 +694,35 @@ section {
         }
       }
     }
-    
+
+    section {
+      title = "Module Configuration"
+
+      variable "module_enabled" {
+        type        = bool
+        default     = true
+        description = <<-END
+          Specifies whether resources in the module will be created.
+        END
+      }
+
+      variable "module_tags" {
+        type        = map(string)
+        default     = {}
+        description = <<-END
+          A map of tags that will be applied to all created resources that accept tags. Tags defined with 'module_tags' can be
+          overwritten by resource-specific tags.
+        END
+      }
+
+      variable "module_depends_on" {
+        type        = list(any)
+        description = <<-END
+          A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
+        END
+      }
+    }
+
   }
 
   section {
@@ -731,18 +735,12 @@ section {
         - **`id`**: The name of the bucket.
         - **`arn`**: The ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.
         - **`bucket_domain_name`**: The bucket domain name. Will be of format `bucketname.s3.amazonaws.com`.
-        - **`bucket_regional_domain_name`**: The bucket region-specific domain name.
-          The bucket domain name including the region name, please refer here for format.
-          Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin,
-          it will prevent redirect issues from CloudFront to S3 Origin URL.
+        - **`bucket_regional_domain_name`**: The bucket region-specific domain name. The bucket domain name including the region name, please refer here for format. Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin, it will prevent redirect issues from CloudFront to S3 Origin URL.
         - **`hosted_zone_id`**: The Route 53 Hosted Zone ID for this bucket's region.
         - **`region`**: The AWS region this bucket resides in.
-      - **`bucket_policy`**: All bucket policy object attributes as returned by the
-      `s3_bucket_policy` resource.
-      - **`origin_access_identity`**: All cloudfront origin access identity object attributes as returned by the
-      `aws_cloudfront_origin_access_identity` resource.
-      - **`access_point`**: A list of
-      `aws_s3_access_point` objects keyed by the `name` attribute.
+      - **`bucket_policy`**: All bucket policy object attributes as returned by the `s3_bucket_policy` resource.
+      - **`origin_access_identity`**: All cloudfront origin access identity object attributes as returned by the `aws_cloudfront_origin_access_identity` resource.
+      - **`access_point`**: A list of `aws_s3_access_point` objects keyed by the `name` attribute.
     END
   }
 
@@ -752,7 +750,7 @@ section {
     section {
       title   = "AWS Documentation S3"
       content = <<-END
-        - Access Points: https://docs.aws.amazon.com/AmazonS3/latest/dev/   access-points.html
+        - Access Points: https://docs.aws.amazon.com/AmazonS3/latest/dev/access-points.html
         - Default Encryption: https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html
         - Optimizing Performance: https://docs.aws.amazon.com/AmazonS3/latest/dev/optimizing-performance.html
         - Requester Pays Bucket: https://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html
@@ -778,11 +776,11 @@ section {
     content = <<-END
       This Module follows the principles of [Semantic Versioning (SemVer)].
 
-      Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following constructs:
+      Given a version number `MAJOR.MINOR.PATCH`, we increment the:
 
-      1. Use the `MAJOR` version for incompatible changes.
-      2. Use the `MINOR` version when adding functionality in a backwards compatible manner.
-      3. Use the `PATCH` version when introducing backwards compatible bug fixes.
+      1. `MAJOR` version when we make incompatible changes,
+      2. `MINOR` version when we add functionality in a backwards compatible manner, and
+      3. `PATCH` version when we make backwards compatible bug fixes.
     END
 
     section {
@@ -797,14 +795,15 @@ section {
   section {
     title   = "About Mineiros"
     content = <<-END
-      Mineiros is a [DevOps as a Service][homepage] company based in Berlin, Germany.
-      We offer commercial support for all of our projects and encourage you to reach out if you have any questions or need help.
-      Feel free to send us an email at [hello@mineiros.io] or join our [Community Slack channel][slack].
+      [Mineiros][homepage] is a remote-first company headquartered in Berlin, Germany
+      that solves development, automation and security challenges in cloud infrastructure.
 
-      We can also help you with:
+      Our vision is to massively reduce time and overhead for teams to manage and
+      deploy production-grade and secure cloud infrastructure.
 
-      - Terraform modules for all types of infrastructure such as VPCs, Docker clusters, databases, logging and monitoring, CI, etc.
-      - Consulting & training on AWS, Terraform and DevOps
+      We offer commercial support for all of our modules and encourage you to reach out
+      if you have any questions or need help. Feel free to email us at [hello@mineiros.io] or join our
+      [Community Slack channel][slack].
     END
   }
 
