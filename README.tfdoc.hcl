@@ -729,19 +729,91 @@ section {
     title   = "Module Outputs"
     content = <<-END
       The following attributes are exported by the module:
-
-      - **`module_enabled`**: The `module_enabled` argument.
-      - **`bucket`**: All bucket attributes as returned by the `aws_s3_bucket` resource containing all arguments as specified above and the other attributes as specified below.
-        - **`id`**: The name of the bucket.
-        - **`arn`**: The ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.
-        - **`bucket_domain_name`**: The bucket domain name. Will be of format `bucketname.s3.amazonaws.com`.
-        - **`bucket_regional_domain_name`**: The bucket region-specific domain name. The bucket domain name including the region name, please refer here for format. Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin, it will prevent redirect issues from CloudFront to S3 Origin URL.
-        - **`hosted_zone_id`**: The Route 53 Hosted Zone ID for this bucket's region.
-        - **`region`**: The AWS region this bucket resides in.
-      - **`bucket_policy`**: All bucket policy object attributes as returned by the `s3_bucket_policy` resource.
-      - **`origin_access_identity`**: All cloudfront origin access identity object attributes as returned by the `aws_cloudfront_origin_access_identity` resource.
-      - **`access_point`**: A list of `aws_s3_access_point` objects keyed by the `name` attribute.
     END
+
+    output "module_enabled" {
+      type        = bool
+      description = <<-END
+        Whether this module is enabled.
+      END
+    }
+
+    output "bucket" {
+      type        = object(bucket)
+      description = <<-END
+        All bucket attributes as returned by the `aws_s3_bucket` resource
+        containing all arguments as specified above and the other attributes as
+        specified below.
+      END
+    }
+
+    output "id" {
+      type        = string
+      description = <<-END
+        The name of the bucket.
+      END
+    }
+
+    output "arn" {
+      type        = string
+      description = <<-END
+        The ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.
+      END
+    }
+
+    output "bucket_domain_name" {
+      type        = string
+      description = <<-END
+        The bucket domain name. Will be of format `bucketname.s3.amazonaws.com`.
+      END
+    }
+
+    output "bucket_regional_domain_name" {
+      type        = string
+      description = <<-END
+        The bucket region-specific domain name. The bucket domain name including
+        the region name, please refer here for format. Note: The AWS CloudFront
+        allows specifying S3 region-specific endpoint when creating S3 origin,
+        it will prevent redirect issues from CloudFront to S3 Origin URL.
+      END
+    }
+
+    output "hosted_zone_id" {
+      type        = string
+      description = <<-END
+        The Route 53 Hosted Zone ID for this bucket's region.
+      END
+    }
+
+    output "region" {
+      type        = string
+      description = <<-END
+        The AWS region this bucket resides in.
+      END
+    }
+
+    output "bucket_policy" {
+      type        = object(bucket_policy)
+      description = <<-END
+        All bucket policy object attributes as returned by the `s3_bucket_policy`
+        resource.
+      END
+    }
+
+    output "origin_access_identity" {
+      type        = object(origin_access_identity)
+      description = <<-END
+        All cloudfront origin access identity object attributes as returned by
+        the `aws_cloudfront_origin_access_identity` resource.
+      END
+    }
+
+    output "access_point" {
+      type        = list(access_point)
+      description = <<-END
+        A list of `aws_s3_access_point` objects keyed by the `name` attribute.
+      END
+    }
   }
 
   section {
