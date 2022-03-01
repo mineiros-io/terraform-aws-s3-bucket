@@ -91,8 +91,7 @@ Most basic usage creating a random named secure AWS bucket.
 
 ```hcl
 module "bucket" {
-  source  = "mineiros-io/s3-bucket/aws"
-  version = "~> 0.6.0"
+  source  = "git@github.com:mineiros-io/terraform-aws-s3-bucket.git?ref=v0.6.0"
 }
 ```
 
@@ -532,7 +531,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `{}`.
 
-- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(any)`)*<a name="var-module_depends_on"></a>
+- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(object)`)*<a name="var-module_depends_on"></a>
 
   A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
 

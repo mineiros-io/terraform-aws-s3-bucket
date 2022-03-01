@@ -101,8 +101,7 @@ section {
 
       ```hcl
       module "bucket" {
-        source  = "mineiros-io/s3-bucket/aws"
-        version = "~> 0.6.0"
+        source  = "git@github.com:mineiros-io/terraform-aws-s3-bucket.git?ref=v0.6.0"
       }
       ```
 
