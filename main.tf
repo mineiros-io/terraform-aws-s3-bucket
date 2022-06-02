@@ -89,6 +89,16 @@ resource "aws_s3_bucket" "bucket" {
       }
     }
   }
+  
+  dynamic "grant" {
+    for_each = var.grants
+    iterator = grant
+    content {
+      id          = lookup(grant.value, "id", null)
+      type        = lookup(grant.value, "type", "CanonicalUser")
+      permissions = lookup(grant.value, "permissions", ["FULL_CONTROL"])
+    }
+  }
 
   dynamic "lifecycle_rule" {
     for_each = var.lifecycle_rules
