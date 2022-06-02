@@ -74,7 +74,6 @@ of the bucket enforcing `bucket-owner-full-control` ACL for objects created by o
 
 - *Features not yet implemented*:
   Enforce Encryption via a policy that blocks unencrypted uploads,
-  ACL policy grants (aws-provider >= 2.52.0),
   Amazon S3 Analytics (aws-provider >= 2.49.0),
   Replication Configuration,
   Website Configuration,
