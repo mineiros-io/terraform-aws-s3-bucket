@@ -38,7 +38,7 @@ resource "aws_s3_bucket" "bucket" {
 
   bucket              = var.bucket
   bucket_prefix       = var.bucket_prefix
-  acl                 = var.acl
+  acl                 = length(var.grants) == 0 ? var.acl : null
   tags                = local.bucket_tags
   force_destroy       = var.force_destroy
   acceleration_status = var.acceleration_status
