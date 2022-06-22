@@ -96,7 +96,7 @@ resource "aws_s3_bucket" "bucket" {
     content {
       id          = lookup(grant.value, "id", null)
       type        = lookup(grant.value, "type", "CanonicalUser")
-      permissions = lookup(grant.value, "permissions", ["FULL_CONTROL"])
+      permissions = lookup(grant.value, "permissions", ["READ"])
     }
   }
 
