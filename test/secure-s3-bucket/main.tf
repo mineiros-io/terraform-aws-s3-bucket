@@ -11,6 +11,8 @@ provider "aws" {
 # Create the Example App S3 Bucket
 # ---------------------------------------------------------------------------------------------------------------------
 
+data "aws_canonical_user_id" "current_user" {}
+
 module "example-app-bucket" {
   source = "../.."
 
@@ -20,6 +22,14 @@ module "example-app-bucket" {
     target_bucket = module.example-log-bucket.id
     target_prefix = "log/"
   }
+  
+  grants = [
+    {
+      id          = data.aws_canonical_user_id.current_user.id
+      type        = "CanonicalUser"
+      permissions = ["FULL_CONTROL"]
+    }
+  ]
 
   create_origin_access_identity = true
 
