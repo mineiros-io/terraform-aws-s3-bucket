@@ -88,7 +88,7 @@ test/unit-tests: DOCKER_FLAGS += ${DOCKER_SSH_FLAGS}
 test/unit-tests: DOCKER_FLAGS += ${DOCKER_GITHUB_FLAGS}
 test/unit-tests: DOCKER_FLAGS += ${DOCKER_AWS_FLAGS}
 test/unit-tests: DOCKER_FLAGS += -e TF_DATA_DIR=.terratest
-test/unit-tests: TEST ?= "TestUnit"
+test/unit-tests: TEST ?= "Test"
 test/unit-tests:
 	@echo "${YELLOW}[TEST] ${GREEN}Start Running Go Tests in Docker Container.${RESET}"
 	$(call go-test,./test -run $(TEST))
