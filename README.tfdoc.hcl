@@ -303,7 +303,7 @@ section {
         
         attribute "permissions" {
           required    = true
-          type        = list
+          type        = list(string)
           description = <<-END
             List of permissions to apply for grantee. Valid values are `READ`, `WRITE`, `READ_ACP`, `WRITE_ACP`, `FULL_CONTROL`
           END
