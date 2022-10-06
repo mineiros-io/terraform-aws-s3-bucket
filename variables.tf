@@ -114,6 +114,22 @@ variable "apply_server_side_encryption_by_default" {
   }
 }
 
+variable "grants" {
+  description = "List of Maps Containing ACL policy grants."
+  type        = any
+  default     = []
+
+  # Example:
+  #
+  # grants = [
+  #   {
+  #     id          = data.aws_canonical_user_id.current_user.id
+  #     type        = "CanonicalUser"
+  #     permissions = ["FULL_CONTROL"]
+  #   }
+  # ]
+}
+
 variable "lifecycle_rules" {
   description = "List of maps containing configuration of object lifecycle management."
   type        = any

@@ -55,6 +55,7 @@ of the bucket enforcing `bucket-owner-full-control` ACL for objects created by o
   Server-Side-Encryption (SSE) enabled by default,
   Versioning,
   Bucket Logging,
+  ACL Policy Grants,
   Lifecycle Rules,
   Request Payer,
   Cross-Origin Resource Sharing (CORS),
@@ -215,6 +216,30 @@ See [variables.tf] and [examples/] for details and use-cases.
   - [**`target_prefix`**](#attr-logging-target_prefix): *(Optional `string`)*<a name="attr-logging-target_prefix"></a>
 
     To specify a key prefix for log objects.
+
+- [**`grants`**](#var-grants): *(Optional `object`)*<a name="var-grants"></a>
+
+  List of Maps Containing ACL policy grants.
+
+  Default is `[]`.
+
+  The object accepts the following attributes:
+
+  - [**`id`**](#attr-grants-id): *(Optional `string`)*<a name="attr-grants-id"></a>
+
+    Canonical user id to grant for. Used only when `type` is `CanonicalUser`
+
+  - [**`type`**](#attr-grants-type): *(**Required** `string`)*<a name="attr-grants-type"></a>
+
+    Type of grantee to apply for. Valid values are `CanonicalUser` and `Group`. `AmazonCustomerByEmail` is not supported.
+
+  - [**`permissions`**](#attr-grants-permissions): *(**Required** `list(string)`)*<a name="attr-grants-permissions"></a>
+
+    List of permissions to apply for grantee. Valid values are `READ`, `WRITE`, `READ_ACP`, `WRITE_ACP`, `FULL_CONTROL`
+
+  - [**`uri`**](#attr-grants-uri): *(Optional `string`)*<a name="attr-grants-uri"></a>
+
+    URI address to grant for. Used only when `type` is `Group`
 
 - [**`apply_server_side_encryption_by_default`**](#var-apply_server_side_encryption_by_default): *(Optional `map(string)`)*<a name="var-apply_server_side_encryption_by_default"></a>
 
@@ -532,7 +557,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `{}`.
 
-- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(any)`)*<a name="var-module_depends_on"></a>
+- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(object)`)*<a name="var-module_depends_on"></a>
 
   A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
 

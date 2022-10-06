@@ -62,6 +62,7 @@ section {
         Server-Side-Encryption (SSE) enabled by default,
         Versioning,
         Bucket Logging,
+        ACL Policy Grants,
         Lifecycle Rules,
         Request Payer,
         Cross-Origin Resource Sharing (CORS),
@@ -273,6 +274,46 @@ section {
           type        = string
           description = <<-END
             To specify a key prefix for log objects.
+          END
+        }
+      }
+      
+      variable "grants" {
+        type        = any
+        default     = []
+        description = <<-END
+          List of Maps Containing ACL policy grants.
+        END
+
+        attribute "id" {
+          required    = false
+          type        = string
+          description = <<-END
+            Canonical user id to grant for. Used only when `type` is `CanonicalUser`
+          END
+        }
+        
+        attribute "type" {
+          required    = true
+          type        = string
+          description = <<-END
+            Type of grantee to apply for. Valid values are `CanonicalUser` and `Group`. `AmazonCustomerByEmail` is not supported.
+          END
+        }
+        
+        attribute "permissions" {
+          required    = true
+          type        = list(string)
+          description = <<-END
+            List of permissions to apply for grantee. Valid values are `READ`, `WRITE`, `READ_ACP`, `WRITE_ACP`, `FULL_CONTROL`
+          END
+        }
+        
+        attribute "uri" {
+          required    = false
+          type        = string
+          description = <<-END
+            URI address to grant for. Used only when `type` is `Group`
           END
         }
       }
